@@ -25,6 +25,7 @@ public class StormSpiritEvents implements Listener {
     HashMap<UUID, Integer> charges = new HashMap<>();
     VendrickBossFight plugin;
     Boolean active = true;
+    Entity spirit;
 
     public StormSpiritEvents(VendrickBossFight plugin){
         this.plugin = plugin;
@@ -33,12 +34,13 @@ public class StormSpiritEvents implements Listener {
     @EventHandler
     public void onStormSpiritSpawn(VendrickSpiritSpawnEvent e){
         if (e.getSpiritType().equals("storm")){
+            spirit = e.getSpirit();
             charges.clear();
             lightningStrike(e.getSpirit());
             new BukkitRunnable(){
                 @Override
                 public void run() {
-                    if (!active) {
+                    if (!active || spirit.isDead()) {
                         cancel();
                     }
                     ballTimer(e.getSpirit().getLocation().getDirection(), e.getSpirit());
@@ -59,7 +61,7 @@ public class StormSpiritEvents implements Listener {
             List<Location> pLocs = new ArrayList<>();
             @Override
             public void run() {
-                if (!active){
+                if (!active || spirit.isDead()){
                     cancel();
                 }
 
@@ -122,7 +124,7 @@ public class StormSpiritEvents implements Listener {
            int count = 0;
            @Override
            public void run() {
-               if (count == 3 && active){
+               if ((count == 3 && active) || spirit.isDead()){
                    cancel();
                }
 
