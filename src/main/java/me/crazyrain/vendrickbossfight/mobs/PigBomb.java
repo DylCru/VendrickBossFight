@@ -66,6 +66,8 @@ public class PigBomb {
         timeStand.addEquipmentLock(EquipmentSlot.HAND, ArmorStand.LockType.REMOVING_OR_CHANGING);
         timeStand.setVisible(false);
         timeStand.setMetadata("BombTimer", new FixedMetadataValue(plugin, "bombtimer"));
+        timeStand.setMarker(true);
+        pigBomb.addPassenger(timeStand);
     }
 
     public void startCountdown(){
