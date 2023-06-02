@@ -1,0 +1,205 @@
+# ---------FIGHT CONFIG----------
+# These settings effect how the fight work
+
+# Whether vendrick can spawn or not
+# default = false
+disable-boss: false
+
+# Disables/Enables the blindness and slowness given to players after Vendrick is killed
+# Default = false
+disable-effects: false
+
+# Skips the after fight cutscene
+# Default = false
+skip-cutscene: false
+# Skips the after Dark Vendrick fight cutscene
+skip-dark-cutscene: false
+
+# Name: WinMessage
+# The players name will be put where [player] is
+# '&' is used to change the colour of the text
+# BroadcastMessage will tell everyone online that a player defeated vendrick (true/false)
+# Default = "&3&o[player] Has defeated Vendrick!" / true
+WinMessage: "&3&o[player] Has defeated Vendrick!"
+BroadcastMessage: true
+
+# This decides whether players keep their inventory if they die in the fight
+# default = true
+keep-inventory: true
+
+# Sets Vendrick's health
+# Interval attacks will always happen at the same times
+# Default and minimum = 500
+# Maximum = 2048
+vendrick-health: 500
+
+# Sets the health of Dark Vendrick's spirits
+# Maximum = 2048
+spirit-health: 350
+
+# Whether Vendrick has the ability to use his "Eternal growth" attack
+# Default = false
+DoGrowths: false
+
+#This decides whether players are able to obtain drops after killing vendrick (effects all drops)
+#default = true
+do-drops: true
+
+# Chance for drops after beating vendrick. 1 = 100%,  0.01 = 1%,  0.001 = 0.01%
+# Put the chance as 0 to prevent that item being dropped
+
+item-chances:
+  - 0.15 # Emerald block
+  - 0.11 # Eternal Fragment
+  - 0.11 # Essence of eternity
+  - 0.10 # Void Core
+  - 0.08 # Infinium
+  - 0.05 # Totem of undying
+  - 0.03 # Plasma Torch
+  - 0.02 # Eternal Hatchet
+  - 0.02 # Shatter spine
+  - 0.01 # The catalyst
+  - 0.007 # Pre-heated oven
+  - 0.007 # Fusion chamber
+  - 0.007 # Vendrick Talisman
+
+# -----------------------------------------
+
+# -----------SPAWN CONFIG------------------
+# These settings effect where vendrick can spawn
+
+# This decides whether vendrick can be spawned anywhere or only at the locations below
+# Default = false
+use-locations: false
+
+# Organise the locations where vendrick can spawn in this format
+# [location name]:
+#   - x
+#   - y
+#   - z
+# Refer to the example location below for help
+
+spawn-locations:
+  1:
+  - 42680
+  - 73
+  - 33828
+
+#-----------ITEM CONFIG-------------------
+# These setting effect how certain items work and the ways you obtain them
+
+# This is the mob type the eternal trader will be
+# D-trader is the Distorted merchant
+# Make sure to type out the name in all caps
+# default = VILLAGER
+trader-type: VILLAGER
+D-trader-type: VILLAGER
+M-trader-type: VILLAGER
+
+# This decides whether all players on the server will be told when someone trades for a special item (true/false)
+# default = true
+announce-special: true
+
+# This decides whether players are able to craft the special items
+can-craft: true
+
+# Name: PlayerShatterDmg
+# This is the damage the shatter stick's ability will do
+# ShatterCooldown is how long the cooldown will be on the ability (in seconds)
+# ShowCooldown tells the player when their shatter stick has been used and when it is off cooldown
+# Default = 15 / 7 / true
+
+PlayerShatterDmg: 15
+ShatterCooldown: 7
+ShowCooldown: true
+
+# This list effects the mobs that the energy rifle CAN'T damage
+rifle-safe:
+  - VILLAGER
+
+# Determines whether a message displays when the energy rifle hits a mob
+do-rifle-feedback: true
+
+# How much damage the rifle will do
+rifle-damage: 20
+
+# How many half hungers the rifle will take
+rifle-cost: 1
+
+# The mob that drops the flame/wave core
+# Make sure the chosen mob is killable or cores will not be obtainable without /ven i
+# defaults:
+# BLAZE
+# GUARDIAN
+# PHANTOM
+flame-core-mob: BLAZE
+wave-core-mob: GUARDIAN
+voltaic-core-mob: PHANTOM
+
+#-----------ITEM STATS CONFIG-------------------
+# These settings effect the enchantments and abilities that certain items have
+
+EternalHatchet:
+  enchants:
+    sharp:
+      - "SHARPNESS"
+      - "4"
+    kb:
+      - "KNOCKBACK"
+      - "2"
+
+TrueEternalHatchet:
+  enchants:
+    sharp:
+      - "SHARPNESS"
+      - "10"
+    kb:
+      - "KNOCKBACK"
+      - "2"
+    fire:
+      - "FIRE_ASPECT"
+      - "2"
+    mending:
+      - "MENDING"
+      - "1"
+
+EternalHelmet:
+  enchants:
+    unb:
+      - "UNBREAKING"
+      - "10"
+
+# Inputs will be interpreted as %
+helm-damage-bonus: 25
+helm-damage-reduction: 35
+
+EternalChestplate:
+  enchants:
+    unb:
+      - "UNBREAKING"
+      - "3"
+    prot:
+      - "PROTECTION"
+      - "3"
+
+# How many half hearts the chestplate will heal
+chestplate-heal: 1
+# Cooldown is in seconds
+chestplate-cooldown: 1
+
+EternalLeggings:
+  enchants:
+    unb:
+      - "UNBREAKING"
+      - "3"
+    prot:
+      - "PROTECTION"
+      - "3"
+
+# Both are in seconds
+legs-potion-length: 10
+legs-cooldown: 15
+
+# In %
+legs-chance: 10
+boots-double-chance: 2

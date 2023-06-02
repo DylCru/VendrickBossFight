@@ -1,0 +1,13 @@
+name: VendrickBossFight
+version: "1.12"
+main: me.crazyrain.vendrickbossfight.VendrickBossFight
+api-version: 1.17
+authors: [ CrazyRain ]
+description: Fight against the eternal guardian, Vendrick
+commands:
+  ven:
+    description: The base for all the vendrick commands
+    usage: /<command>
+  venfight:
+    description: The base for all the fight commands
+    usage: /<command>
