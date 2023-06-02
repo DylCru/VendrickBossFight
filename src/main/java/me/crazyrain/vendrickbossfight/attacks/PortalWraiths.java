@@ -50,6 +50,9 @@ public class PortalWraiths implements Listener {
         public void stopAttack(){
             vendrick.setPhase(0);
             vendrick.stopAttack();
+            if (plugin.runeHandler != null) {
+                plugin.runeHandler.setPaused(false);
+            }
         }
 
         public void stopParticles(){

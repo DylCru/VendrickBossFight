@@ -73,6 +73,9 @@ public class ZombieHoard implements Listener {
 
                 if (zombieAmount <= 0){
                     vendrick.stopAttack();
+                    if (plugin.runeHandler != null) {
+                        plugin.runeHandler.setPaused(false);
+                    }
                 }
             }
         }

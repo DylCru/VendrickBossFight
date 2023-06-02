@@ -76,6 +76,9 @@ public class PigBombs implements Listener {
             @Override
             public void run() {
                 plugin.vendrick.stopAttack();
+                if (plugin.runeHandler != null) {
+                    plugin.runeHandler.setPaused(false);
+                }
             }
         }.runTaskLater(plugin, 20 * 7);
     }
@@ -91,6 +94,9 @@ public class PigBombs implements Listener {
 
                 if (pigAmount <= 0){
                     plugin.vendrick.stopAttack();
+                    if (plugin.runeHandler != null) {
+                        plugin.runeHandler.setPaused(false);
+                    }
                     for (UUID p : plugin.fighting){
                         Bukkit.getPlayer(p).sendMessage(ChatColor.GREEN + "All the pig bombs were diffused!");
                         Bukkit.getPlayer(p).playSound(Bukkit.getPlayer(p).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10 , 1f);
@@ -152,6 +158,9 @@ public class PigBombs implements Listener {
         }
         pigsDead = true;
         plugin.vendrick.stopAttack();
+        if (plugin.runeHandler != null) {
+            plugin.runeHandler.setPaused(false);
+        }
         for (UUID p : plugin.fighting){
             Bukkit.getPlayer(p).sendMessage(ChatColor.GREEN + "All the pig bombs were diffused!");
             Bukkit.getPlayer(p).playSound(Bukkit.getPlayer(p).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10 , 1f);
