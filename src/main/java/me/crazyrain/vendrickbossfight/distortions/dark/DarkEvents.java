@@ -57,6 +57,9 @@ public class DarkEvents implements Listener {
             plugin.runeHandler.setActive(false);
             plugin.runeHandler.clearStand();
             plugin.runeHandler = null;
+            plugin.bars.forEach(bar -> {
+                bar.fill(0.0);
+            });
 
             if (!plugin.getConfig().getBoolean("skip-dark-cutscene")){
                 e.getEntity().setHealth(1);

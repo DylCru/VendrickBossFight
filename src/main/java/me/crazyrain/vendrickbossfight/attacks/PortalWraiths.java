@@ -108,6 +108,7 @@ public class PortalWraiths implements Listener {
                             vector.setX(-Xforce);
                             vector.setZ(-Zforce);
                     }
+                    vector.setY(0.2);
                     portal.setVelocity(vector);
                     new BukkitRunnable(){
 

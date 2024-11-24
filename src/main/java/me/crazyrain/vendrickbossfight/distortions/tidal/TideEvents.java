@@ -116,8 +116,9 @@ public class TideEvents implements Listener {
     public void removeWave(EntityChangeBlockEvent e){
         if (e.getEntity().getType() == EntityType.FALLING_BLOCK){
             FallingBlock fb = (FallingBlock) e.getEntity();
-            if (fb.getBlockData().getMaterial() == Material.BLUE_STAINED_GLASS){
-                e.setCancelled(true);
+            if (fb.getBlockData().getMaterial() == Material.ICE){
+                Bukkit.broadcastMessage("ice landed");
+//                e.setCancelled(true);
             }
         }
     }

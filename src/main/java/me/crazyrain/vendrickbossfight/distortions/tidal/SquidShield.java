@@ -105,6 +105,10 @@ public class SquidShield {
 
                 @Override
                 public void run() {
+                    if (!plugin.venSpawned || vendrick.getVendrick().isDead()) {
+                        shield.remove();
+                        cancel();
+                    }
                     if (count == 15){
                         cancel();
                     }

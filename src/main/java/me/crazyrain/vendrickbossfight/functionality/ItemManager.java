@@ -146,6 +146,8 @@ public class ItemManager {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Lang.STARNAME.toString());
+        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         List <String> lore = new ArrayList<>();
         lore.add(Lang.STARTAGLINE.toString());
         lore.add("");
@@ -189,6 +191,8 @@ public class ItemManager {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Lang.DSTARNAME.toString() + ChatColor.RED + "" + ChatColor.BOLD + " (FLAMING)");
+        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         List <String> lore = new ArrayList<>();
         lore.add(Lang.DSTARTAGLINE.toString());
         lore.add("");
@@ -216,6 +220,8 @@ public class ItemManager {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Lang.DSTARNAME.toString() + ChatColor.BLUE + "" + ChatColor.BOLD + " (TIDAL)");
+        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         List <String> lore = new ArrayList<>();
         lore.add(Lang.DSTARTAGLINE.toString());
         lore.add("");
@@ -244,6 +250,8 @@ public class ItemManager {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Lang.DSTARNAME.toString() + ChatColor.YELLOW + "" + ChatColor.BOLD + " (STORMY)");
+        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         List <String> lore = new ArrayList<>();
         lore.add(Lang.DSTARTAGLINE.toString());
         lore.add("");
@@ -272,6 +280,8 @@ public class ItemManager {
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Lang.DSTARNAME.toString() + ChatColor.DARK_GRAY + "" + ChatColor.BOLD + " (DARK)");
+        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         List <String> lore = new ArrayList<>();
         lore.add(Lang.DSTARTAGLINE.toString());
         lore.add("");
@@ -517,7 +527,7 @@ public class ItemManager {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         List<String> lore = new ArrayList<>();
-        lore.add(Rarity.EPIC.toString());
+        lore.add(Rarity.SPECIAL.toString());
         lore.add("");
         lore.add(Lang.APPLE1.toString());
         lore.add(Lang.APPLE2.toString());
@@ -538,7 +548,7 @@ public class ItemManager {
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         List<String> lore = new ArrayList<>();
-        lore.add(Rarity.SPECIAL.toString());
+        lore.add(Rarity.EPIC.toString());
         lore.add("");
         lore.add(Lang.OVEN1.toString());
         lore.add(ChatColor.DARK_GRAY + "");

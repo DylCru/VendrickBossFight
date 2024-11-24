@@ -108,8 +108,8 @@ public class TideSpiritEvents implements Listener {
 
         Entity spirit = e.getEntity();
 
-        int spawnChance = (int) (Math.random() * 8);
-        if (spawnChance == 7){
+        int spawnChance = (int) (Math.random() * 100);
+        if (spawnChance == 93){
             double mobType = Math.random();
 
             List<Location> spawnLocs = new ArrayList<>();

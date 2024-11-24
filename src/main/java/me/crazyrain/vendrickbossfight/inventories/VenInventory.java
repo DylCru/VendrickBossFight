@@ -33,7 +33,7 @@ public class VenInventory implements InventoryHolder {
     private void init(){
         for (int i = 0; i < inv.getSize(); i++){
             if (ArrayUtils.contains(border, i)){
-                inv.setItem(i, createItem("", Material.BLACK_STAINED_GLASS_PANE, null));
+                inv.setItem(i, createItem( " ", Material.BLACK_STAINED_GLASS_PANE, null));
             }
         }
         int index = 0;

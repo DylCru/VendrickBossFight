@@ -20,7 +20,7 @@ public class FlameSpiritEvents implements Listener {
     ArmorStand flameBomb;
     boolean flameBombActive = false;
     Boolean flameBombDestroyed = false;
-    int flameBombHealth = 5;
+    int flameBombHealth = 3;
     boolean infernoing = false;
     Inferno inferno;
 

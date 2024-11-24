@@ -1,14 +1,18 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -182,4 +186,17 @@ public class VenArmourEvents implements Listener {
             }
         }
     }
+
+    @EventHandler
+    public void preventBootsInCauldron(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (player.getEquipment().getItemInMainHand().equals(ItemManager.venBoots)) {
+            if (e.getClickedBlock() != null) {
+                if (e.getClickedBlock().getType().equals(Material.WATER_CAULDRON)) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
 }

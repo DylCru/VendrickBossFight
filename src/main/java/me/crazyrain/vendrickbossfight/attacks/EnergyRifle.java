@@ -102,9 +102,6 @@ public class EnergyRifle implements Listener {
                             int damage = plugin.getConfig().getInt("rifle-damage");
                             en.damage(damage, player);
                             en.getWorld().strikeLightningEffect(en.getLocation());
-                            if (plugin.getConfig().getBoolean("do-rifle-feedback")) {
-                                player.sendMessage(ChatColor.DARK_GRAY + "Your Pulse Shot hit " + e.getName() + ChatColor.DARK_GRAY + " for " + damage + " damage");
-                            }
                             pulse.remove();
                             cancel();
                         } catch (ClassCastException ignored){}

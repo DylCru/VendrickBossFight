@@ -2,8 +2,10 @@ package me.crazyrain.vendrickbossfight.Commands;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.attacks.PortalWraiths;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.DistSpirit;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.TsunamiCountdown;
+import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
 import me.crazyrain.vendrickbossfight.functionality.ItemManager;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
 import me.crazyrain.vendrickbossfight.functionality.LootHandler;
@@ -21,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import javax.sound.sampled.Port;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -55,7 +59,7 @@ public class Commands implements CommandExecutor {
                         player.sendMessage("");
                         player.sendMessage(ChatColor.AQUA + "/ven reload / rl - Reloads the plugin's config");
                         player.sendMessage("");
-                        player.sendMessage(ChatColor.AQUA + "/ven merchant [e/d] - Allows you to spawn an Eternal Merchant");
+                        player.sendMessage(ChatColor.AQUA + "/ven merchant [e/d/m] - Allows you to spawn an Eternal Merchant");
                         player.sendMessage("");
                         player.sendMessage(ChatColor.AQUA + "/ven mremove - Removes all merchants in a 5 block radius");
                         player.sendMessage("");
@@ -78,7 +82,7 @@ public class Commands implements CommandExecutor {
 
                     } else if(args[0].equalsIgnoreCase("merchant")){
                         if (args.length < 2) {
-                            player.sendMessage(venPrefix + ChatColor.RED + " /ven merchant [e/d]");
+                            player.sendMessage(venPrefix + ChatColor.RED + " /ven merchant [e/d/m]");
                             return true;
                         }
                         if (args[1].equalsIgnoreCase("e")){
@@ -193,6 +197,8 @@ public class Commands implements CommandExecutor {
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("test")) {
+                        BubbleBomb bubbleBomb = new BubbleBomb(player.getLocation());
+                        bubbleBomb.startAttack();
                     } else {
                         player.sendMessage(venPrefix + ChatColor.RED + " /ven [help] [items] [reload] [merchant] [mremove] [refresh]");
                     }

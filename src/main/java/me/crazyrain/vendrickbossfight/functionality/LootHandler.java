@@ -51,7 +51,7 @@ public class LootHandler {
         itemReq.put(ItemManager.vendrickHatchet, 0);
         itemReq.put(ItemManager.shatterSpine, 0);
         itemReq.put(ItemManager.theCatalyst, 0);
-        itemReq.put(ItemManager.oven, 2);
+        itemReq.put(ItemManager.lusciousApple, 2);
         itemReq.put(ItemManager.fusionChamber, 4);
         itemReq.put(ItemManager.vendrickTalisman, 5);
 
@@ -65,7 +65,7 @@ public class LootHandler {
         itemRarity.put(ItemManager.vendrickHatchet.getType(), Rarity.SPECIAL.toString());
         itemRarity.put(ItemManager.shatterSpine.getType(), Rarity.SPECIAL.toString());
         itemRarity.put(ItemManager.theCatalyst.getType(), Rarity.SPECIAL.toString());
-        itemRarity.put(ItemManager.oven.getType(), Rarity.INSANE.toString());
+        itemRarity.put(ItemManager.lusciousApple.getType(), Rarity.INSANE.toString());
         itemRarity.put(ItemManager.fusionChamber.getType(), Rarity.INSANE.toString());
         itemRarity.put(ItemManager.vendrickTalisman.getType(), Rarity.INSANE.toString());
 
@@ -79,7 +79,7 @@ public class LootHandler {
         itemChances.put(ItemManager.vendrickHatchet, chances[7]);
         itemChances.put(ItemManager.shatterSpine, chances[8]);
         itemChances.put(ItemManager.theCatalyst, chances[9]);
-        itemChances.put(ItemManager.oven, chances[10]);
+        itemChances.put(ItemManager.lusciousApple, chances[10]);
         itemChances.put(ItemManager.fusionChamber, chances[11]);
         itemChances.put(ItemManager.vendrickTalisman, chances[12]);
     }

@@ -111,3 +111,8 @@ buildNumber.properties
 
 # Common working directory
 run/
+
+#Rewrite notes
+/src/main/resources/Rewrite notes.txt
+/build.bat
+/mcrcon.exe
