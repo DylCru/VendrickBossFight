@@ -6,6 +6,7 @@ import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.attacks.*;
 import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.distortions.flaming.FlamingVendrick;
+import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
 import me.crazyrain.vendrickbossfight.distortions.stormy.StormyVendrick;
@@ -316,12 +317,22 @@ public class Events implements Listener {
                         for (Bar bar : plugin.bars){
                             bar.fill(0.50);
                         }
-                        PigBombs pigBombs = new PigBombs(plugin);
-                        pigBombs.init(plugin.vendrick, plugin.fighting);
-                        plugin.vendrick.startAttack(2);
-                        for (UUID id : plugin.fighting){
-                            AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
-                            Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                        if (e.getEntity().getScoreboardTags().contains("venTide")) {
+                            plugin.vendrick.startAttack(2);
+                            BubbleBomb bomb = new BubbleBomb(e.getEntity().getLocation(), plugin, plugin.fighting);
+                            bomb.startAttack();
+                            for (UUID id : plugin.fighting){
+                                AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));
+                                Bukkit.getPlayer(id).sendMessage(Lang.BUBBLE.toString());
+                            }
+                        } else {
+                            PigBombs pigBombs = new PigBombs(plugin);
+                            pigBombs.init(plugin.vendrick, plugin.fighting);
+                            plugin.vendrick.startAttack(2);
+                            for (UUID id : plugin.fighting){
+                                AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
+                                Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                            }
                         }
                     }
                 }
@@ -395,14 +406,24 @@ public class Events implements Listener {
                                 break;
                             case 1:
                                 if (!(attacking) && !(percent == 0.50)) {
-                                    PigBombs pigBombs = new PigBombs(plugin);
-                                    pigBombs.init(plugin.vendrick, plugin.fighting);
-                                    plugin.vendrick.startAttack(2);
-                                    attacking = true;
-                                    for (UUID id : plugin.fighting){
-                                        AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
-                                        Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                                    if (e.getEntity().getScoreboardTags().contains("venTide")) {
+                                        plugin.vendrick.startAttack(2);
+                                        BubbleBomb bomb = new BubbleBomb(e.getEntity().getLocation(), plugin, plugin.fighting);
+                                        bomb.startAttack();
+                                        for (UUID id : plugin.fighting){
+                                            AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));
+                                            Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                                        }
+                                    } else {
+                                        PigBombs pigBombs = new PigBombs(plugin);
+                                        pigBombs.init(plugin.vendrick, plugin.fighting);
+                                        plugin.vendrick.startAttack(2);
+                                        for (UUID id : plugin.fighting){
+                                            AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
+                                            Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                                        }
                                     }
+                                    attacking = true;
                                     try{
                                         plugin.runeHandler.setPaused(true);
                                     } catch (Exception ignored){}

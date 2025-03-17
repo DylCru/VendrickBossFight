@@ -26,6 +26,7 @@ import org.bukkit.util.Vector;
 import javax.sound.sampled.Port;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -135,7 +136,8 @@ public class Commands implements CommandExecutor {
                                         || e.getCustomName() != null && e.getCustomName().contains("Portal Health")
                                         || e.getType().equals(EntityType.GUARDIAN)
                                         || e.getType().equals(EntityType.ELDER_GUARDIAN)
-                                        || e.getType().equals(EntityType.DROWNED)){
+                                        || e.getType().equals(EntityType.DROWNED)
+                                        || e.hasMetadata("VenBubble")){
                                     e.getWorld().spawnParticle(Particle.SPELL_WITCH, e.getLocation(), 10);
                                     e.remove();
                                     enCount++;
@@ -197,7 +199,9 @@ public class Commands implements CommandExecutor {
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("test")) {
-                        BubbleBomb bubbleBomb = new BubbleBomb(player.getLocation());
+                        ArrayList<UUID> players = new ArrayList<>();
+                        players.add(player.getUniqueId());
+                        BubbleBomb bubbleBomb = new BubbleBomb(player.getLocation(), plugin, players);
                         bubbleBomb.startAttack();
                     } else {
                         player.sendMessage(venPrefix + ChatColor.RED + " /ven [help] [items] [reload] [merchant] [mremove] [refresh]");

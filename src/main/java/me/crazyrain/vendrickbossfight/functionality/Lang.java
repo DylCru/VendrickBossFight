@@ -179,6 +179,8 @@ public enum Lang {
     DARKEND9("dark-end9","&cWHAT ARE YOU DOING? STOP THIS NOW. YOU CANNOT DEFEAT ME. I AM ETERNAL"),
     DARKEND10("dark-end10","&cNOOOOOOOOOOOOOOOOOO"),
     DARKEND11("dark-end11","&7Thank you adventurers. The eternal realm is free now. Thanks to you."),
+    BUBBLE("ven-bubble", "&c&l[Vendrick] &cI've had enough of you."),
+    BUBBLEHELP("ven-bubble-help", "&cVendrick is getting ready to unleash a powerful explosion, hide in the &9&lBubble Shield!")
     ;
 
 
