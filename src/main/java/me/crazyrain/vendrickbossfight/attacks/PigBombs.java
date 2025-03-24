@@ -28,7 +28,6 @@ public class PigBombs implements Listener {
 
     public PigBombs(VendrickBossFight plugin){
         this.plugin = plugin;
-
     }
 
     public void init(Vendrick vendrick, List<UUID> players){

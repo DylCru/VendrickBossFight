@@ -19,6 +19,7 @@ public class BubbleBomb {
     ArmorStand bubble;
     List<UUID> fighting;
     int radius = 2;
+    boolean active = false;
 
     public BubbleBomb(Location venLoc, VendrickBossFight plugin, List<UUID> fighting) {
         this.venLoc = venLoc;
@@ -27,12 +28,17 @@ public class BubbleBomb {
     }
 
     public void startAttack() {
+        active = true;
         spawnBubbleStand();
         new BukkitRunnable(){
             int count = 0;
             @Override
             public void run() {
+                if (!active) {
+                    cancel();
+                }
                 if (count == 2) {
+                    plugin.vendrick.setSkipable(true);
                     for (UUID id : fighting){
                         Bukkit.getPlayer(id).sendMessage(Lang.BUBBLEHELP.toString());
                     }
@@ -48,6 +54,10 @@ public class BubbleBomb {
         }.runTaskTimer(plugin, 0, 20);
     }
 
+    public void stopAttack() {
+        this.active = false;
+    }
+
     private void spawnBubbleStand() {
             Vector vector = new Vector(
                     ((Math.random() * (1.5 - -1.5)) + -1.5),
@@ -60,7 +70,6 @@ public class BubbleBomb {
             bubble.setMetadata("VenBubble", new FixedMetadataValue(plugin, "VenBubble"));
     }
 
-    //TODO: Add bubble bomb functionality and replace tsunami with it
 
     private void spawnParticles(Location location, double radius, int density) {
         location.getWorld().playSound(location, Sound.BLOCK_BEACON_ACTIVATE, 1.0f, 1.0f);
@@ -69,7 +78,7 @@ public class BubbleBomb {
 
             @Override
             public void run() {
-                if (ticks >= 100) { // 5 seconds at 20 ticks per second
+                if (ticks >= 100 || !active) { // 5 seconds at 20 ticks per second
                     this.cancel();
                     return;
                 }

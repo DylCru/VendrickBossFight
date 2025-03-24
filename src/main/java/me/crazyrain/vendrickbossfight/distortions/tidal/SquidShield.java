@@ -21,6 +21,7 @@ public class SquidShield {
     Vendrick vendrick;
     List<UUID> fighting;
     VendrickBossFight plugin = VendrickBossFight.getPlugin(VendrickBossFight.class);
+    Squid entity;
 
     boolean spawn = true;
 
@@ -32,6 +33,10 @@ public class SquidShield {
 
     public void stopSpawn(){
         this.spawn = false;
+    }
+
+    public Squid getEntity() {
+        return entity;
     }
 
     public void throwSpawn(){
@@ -91,12 +96,13 @@ public class SquidShield {
 
     public void spawnSquid(Location loc){
         if (plugin.venSpawned){
-            Squid shield = (Squid) loc.getWorld().spawnEntity(loc, EntityType.SQUID);
+            entity = (Squid) loc.getWorld().spawnEntity(loc, EntityType.SQUID);
 
-            shield.setCustomName(ChatColor.DARK_BLUE + "" + ChatColor.BOLD +  "Squid Shield");
-            shield.setGlowing(true);
-            shield.setCustomNameVisible(true);
-            shield.setMetadata("SquidShield", new FixedMetadataValue(plugin, "squidshield"));
+            entity.setCustomName(ChatColor.DARK_BLUE + "" + ChatColor.BOLD +  "Squid Shield");
+            entity.setGlowing(true);
+            entity.setCustomNameVisible(true);
+            entity.setMetadata("SquidShield", new FixedMetadataValue(plugin, "squidshield"));
+            ((TidalVendrick) plugin.vendrick).getSheilds().add(entity);
             plugin.squids--;
 
             new BukkitRunnable(){
@@ -106,14 +112,14 @@ public class SquidShield {
                 @Override
                 public void run() {
                     if (!plugin.venSpawned || vendrick.getVendrick().isDead()) {
-                        shield.remove();
+                        entity.remove();
                         cancel();
                     }
                     if (count == 15){
                         cancel();
                     }
                     loc.getWorld().playSound(loc, Sound.ENTITY_PLAYER_SPLASH, 1.0f, 0.5f);
-                    shield.teleport(loc.add(0,move,0));
+                    entity.teleport(loc.add(0,move,0));
                     count++;
                 }
             }.runTaskTimer(plugin, 0, 1);

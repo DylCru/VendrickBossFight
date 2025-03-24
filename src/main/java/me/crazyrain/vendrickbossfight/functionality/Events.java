@@ -318,8 +318,9 @@ public class Events implements Listener {
                             bar.fill(0.50);
                         }
                         if (e.getEntity().getScoreboardTags().contains("venTide")) {
-                            plugin.vendrick.startAttack(2);
+                            plugin.vendrick.startAttack(5);
                             BubbleBomb bomb = new BubbleBomb(e.getEntity().getLocation(), plugin, plugin.fighting);
+                            ((TidalVendrick) plugin.vendrick).setBubbleBomb(bomb);
                             bomb.startAttack();
                             for (UUID id : plugin.fighting){
                                 AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));

@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -84,6 +85,13 @@ public class DarkEvents implements Listener {
                 }.runTaskLater(plugin, 40);
             }
         }
+    }
+
+    @EventHandler
+    public void clearSpiritsOnDeath(PlayerDeathEvent e) {
+        try {
+            ((DarkVendrick) plugin.vendrick).getSpirit().removeSpirit();
+        } catch (Exception ignored) {}
     }
 
     private void endText(LivingEntity e, Location loc){
@@ -325,6 +333,8 @@ public class DarkEvents implements Listener {
             public void run() {
                 DistSpirit spirit = new DistSpirit(loc, type);
                 spirit.spawnMob();
+                ((DarkVendrick) plugin.vendrick).setSpirit(spirit);
+                plugin.vendrick.setSkipable(true);
                 Bukkit.getPluginManager().callEvent(new VendrickSpiritSpawnEvent(type, plugin.fighting, spirit.getSpirit()));
             }
         }.runTaskLater(VendrickBossFight.plugin, 20 * 7);

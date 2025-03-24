@@ -1,7 +1,9 @@
 package me.crazyrain.vendrickbossfight.distortions.dark.spirits;
 
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSkipSpiritEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -174,5 +176,15 @@ public class StormSpiritEvents implements Listener {
                 count++;
             }
         }.runTaskTimer(plugin, 0, 1);
+    }
+
+    @EventHandler
+    public void onSpiritSkipped(VendrickSkipSpiritEvent e) {
+        if (!e.getSpiritData().equalsIgnoreCase("ven_spirit_storm")) {
+            return;
+        }
+        charges.clear();
+        active = false;
+        ((DarkVendrick) plugin.vendrick).getSpirit().removeSpirit();
     }
 }
