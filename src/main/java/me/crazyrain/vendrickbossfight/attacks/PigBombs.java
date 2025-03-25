@@ -74,9 +74,11 @@ public class PigBombs implements Listener {
         new BukkitRunnable(){
             @Override
             public void run() {
-                plugin.vendrick.stopAttack();
-                if (plugin.runeHandler != null) {
-                    plugin.runeHandler.setPaused(false);
+                if (!pigsDead) {
+                    plugin.vendrick.stopAttack();
+                    if (plugin.runeHandler != null) {
+                        plugin.runeHandler.setPaused(false);
+                    }
                 }
             }
         }.runTaskLater(plugin, 20 * 7);

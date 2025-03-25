@@ -5,6 +5,7 @@ import me.crazyrain.vendrickbossfight.Commands.FightCommands;
 import me.crazyrain.vendrickbossfight.attacks.*;
 import me.crazyrain.vendrickbossfight.distortions.dark.DarkEvents;
 import me.crazyrain.vendrickbossfight.distortions.dark.DarkRuneHandler;
+import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.distortions.dark.VendrickTNT;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.FlameSpiritEvents;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.StormSpiritEvents;
@@ -126,6 +127,9 @@ public final class VendrickBossFight extends JavaPlugin {
             } catch (Exception ignored) {}
             try {
                 ((TidalVendrick) vendrick).removeSheilds();
+            } catch (Exception ignored) {}
+            try {
+                ((DarkVendrick) vendrick).getSpirit().removeSpirit();
             } catch (Exception ignored) {}
         }
     }

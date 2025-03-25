@@ -31,6 +31,7 @@ public class DarkVendrick extends Vendrick {
     int phase;
     boolean skipable = false;
     DistSpirit spirit;
+    boolean isDead = false;
 
     public DarkVendrick(List<UUID> players, Location spawnLoc, VendrickBossFight plugin) {
         super(players, spawnLoc, plugin);
@@ -131,4 +132,12 @@ public class DarkVendrick extends Vendrick {
 
     @Override
     public String getDistortion(){ return "Dark";}
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
 }

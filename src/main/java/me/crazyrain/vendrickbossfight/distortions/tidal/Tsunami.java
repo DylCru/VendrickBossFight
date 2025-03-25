@@ -16,6 +16,8 @@ import java.util.UUID;
 
 public class Tsunami {
 
+    //THIS CLASS IS UNUSED
+
     Vendrick vendrick;
     List<UUID> fighting;
 

@@ -61,6 +61,7 @@ public class DarkEvents implements Listener {
             plugin.bars.forEach(bar -> {
                 bar.fill(0.0);
             });
+            ((DarkVendrick) plugin.vendrick).setDead(true);
 
             if (!plugin.getConfig().getBoolean("skip-dark-cutscene")){
                 e.getEntity().setHealth(1);
@@ -133,6 +134,7 @@ public class DarkEvents implements Listener {
                             eKing.setGlowing(true);
                             eKing.setInvulnerable(true);
                             eKing.setCustomName(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "Eternal King");
+                            eKing.setMetadata("ven-e-king", new FixedMetadataValue(plugin, "ven-e-king"));
                             loc.getWorld().playSound(loc, Sound.ENTITY_WITHER_SPAWN, 1.0f, 0.9f);
                             break;
                         case 7:

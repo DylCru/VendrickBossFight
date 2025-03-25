@@ -137,7 +137,9 @@ public class Commands implements CommandExecutor {
                                         || e.getType().equals(EntityType.GUARDIAN)
                                         || e.getType().equals(EntityType.ELDER_GUARDIAN)
                                         || e.getType().equals(EntityType.DROWNED)
-                                        || e.hasMetadata("VenBubble")){
+                                        || e.hasMetadata("VenBubble")
+                                        || e.hasMetadata("ven-e-king"))
+                                {
                                     e.getWorld().spawnParticle(Particle.SPELL_WITCH, e.getLocation(), 10);
                                     e.remove();
                                     enCount++;

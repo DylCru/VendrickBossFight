@@ -1,2 +1,2 @@
 # Vendrick: The Eternal Guardian Boss Fight
-Version 1.12
+Version 1.13

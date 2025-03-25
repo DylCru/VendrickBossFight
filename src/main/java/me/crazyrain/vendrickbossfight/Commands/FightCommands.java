@@ -137,6 +137,12 @@ public class FightCommands implements CommandExecutor {
                 }
                 else if (args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("st")){
                     if (plugin.venSpawned){
+                        if (plugin.vendrick.getDistortion().equalsIgnoreCase("dark")) {
+                            if (((DarkVendrick) plugin.vendrick).isDead()) {
+                                player.sendMessage(venPrefix + ChatColor.RED + " You cannot end the fight now, wait for the cutscene to end.");
+                                return true;
+                            }
+                        }
                         if (plugin.vendrick.getPhase() == 0){
                             for (Bar bar : plugin.bars){
                                 bar.remove();

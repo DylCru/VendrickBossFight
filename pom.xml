@@ -6,7 +6,7 @@
 
     <groupId>me.CrazyRain</groupId>
     <artifactId>VendrickBossFight</artifactId>
-    <version>1.12.2</version>
+    <version>1.13</version>
     <packaging>jar</packaging>
 
     <name>VendrickBossFight</name>
