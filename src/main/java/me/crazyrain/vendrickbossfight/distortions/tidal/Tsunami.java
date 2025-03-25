@@ -16,6 +16,8 @@ import java.util.UUID;
 
 public class Tsunami {
 
+    //THIS CLASS IS UNUSED
+
     Vendrick vendrick;
     List<UUID> fighting;
 
@@ -81,7 +83,7 @@ public class Tsunami {
                 for (Location loc : plusX){
                     Location move = loc.add(1, 0,0);
                     Location spawn = move.clone().add(0,2,0);
-                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.BLUE_STAINED_GLASS.createBlockData());
+                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.ICE.createBlockData());
                     wave.setPersistent(true);
                     wave.setInvulnerable(true);
 
@@ -113,7 +115,7 @@ public class Tsunami {
                 for (Location loc : negX){
                     Location move = loc.add(-1, 0,0);
                     Location spawn = move.clone().add(0,2,0);
-                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.BLUE_STAINED_GLASS.createBlockData());
+                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.ICE.createBlockData());
                     wave.setPersistent(true);
                     wave.setInvulnerable(true);
 
@@ -145,7 +147,7 @@ public class Tsunami {
                 for (Location loc : plusZ){
                     Location move = loc.add(0, 0,1);
                     Location spawn = move.clone().add(0,2,0);
-                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.BLUE_STAINED_GLASS.createBlockData());
+                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.ICE.createBlockData());
                     wave.setPersistent(true);
                     wave.setInvulnerable(true);
 
@@ -177,7 +179,7 @@ public class Tsunami {
                 for (Location loc : negZ){
                     Location move = loc.add(0, 0,-1);
                     Location spawn = move.clone().add(0,2,0);
-                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.BLUE_STAINED_GLASS.createBlockData());
+                    wave = vendrick.getVendrick().getWorld().spawnFallingBlock(spawn, Material.ICE.createBlockData());
                     wave.setPersistent(true);
                     wave.setInvulnerable(true);
 

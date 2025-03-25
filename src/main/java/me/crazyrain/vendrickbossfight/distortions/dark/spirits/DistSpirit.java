@@ -1,10 +1,7 @@
 package me.crazyrain.vendrickbossfight.distortions.dark.spirits;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -81,5 +78,14 @@ public class DistSpirit {
         spirit.getEquipment().setItemInMainHand(soulBlade);
 
         spawnLoc.getWorld().playSound(spawnLoc, Sound.ENTITY_WITHER_DEATH, 1.0f, 1.5f);
+    }
+
+    public void removeSpirit() {
+        spirit.getWorld().spawnParticle(Particle.SPELL_WITCH, spirit.getLocation(), 5);
+        spirit.remove();
+    }
+
+    public String getMetadata() {
+        return metadata;
     }
 }

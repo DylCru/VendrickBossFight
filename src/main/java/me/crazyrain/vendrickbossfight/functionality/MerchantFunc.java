@@ -100,14 +100,14 @@ public class MerchantFunc implements Listener {
             recipeList.add(nutriment);
 
             merchFrag.setAmount(7);
-            MerchantRecipe apple = new MerchantRecipe(ItemManager.lusciousApple, 10000);
-            apple.addIngredient(merchFrag);
-            apple.addIngredient(ItemManager.oven);
-            recipeList.add(apple);
+            MerchantRecipe oven = new MerchantRecipe(ItemManager.oven, 10000);
+            oven.addIngredient(merchFrag);
+            oven.addIngredient(ItemManager.lusciousApple);
+            recipeList.add(oven);
 
             MerchantRecipe nutrimentU = new MerchantRecipe(ItemManager.nutrimentU, 10000);
             nutrimentU.addIngredient(ItemManager.nutrimentOfTheInfinite);
-            nutrimentU.addIngredient(ItemManager.lusciousApple);
+            nutrimentU.addIngredient(ItemManager.oven);
             recipeList.add(nutrimentU);
 
             merchInf.setAmount(3);

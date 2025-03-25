@@ -2,6 +2,7 @@ package me.crazyrain.vendrickbossfight.distortions.dark;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.distortions.dark.spirits.DistSpirit;
 import me.crazyrain.vendrickbossfight.functionality.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.bukkit.Bukkit;
@@ -29,6 +30,8 @@ public class DarkVendrick extends Vendrick {
     Location spawnLoc;
     int phase;
     boolean skipable = false;
+    DistSpirit spirit;
+    boolean isDead = false;
 
     public DarkVendrick(List<UUID> players, Location spawnLoc, VendrickBossFight plugin) {
         super(players, spawnLoc, plugin);
@@ -94,6 +97,14 @@ public class DarkVendrick extends Vendrick {
         setSkipable(false);
     }
 
+    public void setSpirit(DistSpirit spirit) {
+        this.spirit = spirit;
+    }
+
+    public DistSpirit getSpirit() {
+        return spirit;
+    }
+
     @Override
     public void setSkipable(Boolean skipable){
         this.skipable = skipable;
@@ -121,4 +132,12 @@ public class DarkVendrick extends Vendrick {
 
     @Override
     public String getDistortion(){ return "Dark";}
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDead(boolean dead) {
+        isDead = dead;
+    }
 }

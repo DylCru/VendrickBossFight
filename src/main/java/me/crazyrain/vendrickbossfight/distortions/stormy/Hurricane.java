@@ -60,11 +60,13 @@ public class Hurricane {
                     if (!(e instanceof  Player)){
                         continue;
                     }
-                    Player player = (Player) e;
-                    for (int i = 0; i < 5; i++){player.getWorld().strikeLightningEffect(player.getLocation());}
-                    player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.0f, 1.4f);
-                    player.damage(damage, plugin.vendrick.getVendrick());
-                    player.sendMessage(ChatColor.RED + "This storm is really violent. You shouldn't stay in it for long.");
+                    if (plugin.venSpawned) {
+                        Player player = (Player) e;
+                        for (int i = 0; i < 5; i++){player.getWorld().strikeLightningEffect(player.getLocation());}
+                        player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 1.0f, 1.4f);
+                        player.damage(damage, plugin.vendrick.getVendrick());
+                        player.sendMessage(ChatColor.RED + "This storm is really violent. You shouldn't stay in it for long.");
+                    }
                 }
             }
         }.runTaskTimer(plugin, 0, 40);

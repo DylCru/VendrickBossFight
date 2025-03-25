@@ -35,9 +35,9 @@ public class StormyEvents implements Listener {
     @EventHandler
     public void onVendrickAttack(EntityDamageByEntityEvent e){
         if (e.getEntity().getScoreboardTags().contains("venStorm")){
-            int chance = (int) (Math.random() * 17);
+            int chance = (int) (Math.random() * 100);
 
-            if (chance >= 14){
+            if (chance >= 95){
                 plugin.vendrick.startAttack(0);
                 LightningStorm storm = new LightningStorm(plugin);
                 for (UUID p : plugin.fighting){
@@ -68,7 +68,8 @@ public class StormyEvents implements Listener {
         }
         if (e.getPlayer().getEquipment().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.ballLightning.getItemMeta().getDisplayName())){
             Vector direction = player.getLocation().getDirection().normalize();
-            e.getPlayer().getEquipment().getItemInMainHand().setAmount(0);
+            int amount = e.getPlayer().getEquipment().getItemInMainHand().getAmount();
+            e.getPlayer().getEquipment().getItemInMainHand().setAmount(amount - 1);
             e.getPlayer().updateInventory();
 
             ArmorStand pulse = (ArmorStand) player.getLocation().getWorld().spawnEntity(player.getLocation().add(direction), EntityType.ARMOR_STAND);
@@ -90,7 +91,7 @@ public class StormyEvents implements Listener {
                     }
                     pulse.setVelocity(direction);
 
-                    for (Entity e : pulse.getNearbyEntities(0.2, 0.2, 0.2)) {
+                    for (Entity e : pulse.getNearbyEntities(0.4, 0.4, 0.4)) {
                         if (e instanceof Player || e instanceof ArmorStand) {
                             continue;
                         }

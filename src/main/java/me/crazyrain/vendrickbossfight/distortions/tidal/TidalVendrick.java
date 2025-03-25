@@ -10,9 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Vindicator;
+import org.bukkit.entity.*;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 
@@ -29,6 +27,8 @@ public class TidalVendrick extends Vendrick {
     Location spawnLoc;
     int phase;
     boolean skipable = false;
+    ArrayList<Entity> sheilds = new ArrayList<>();
+    BubbleBomb bubbleBomb;
 
     public TidalVendrick(List<UUID> players, Location spawnLoc, VendrickBossFight plugin) {
         super(players, spawnLoc, plugin);
@@ -124,4 +124,24 @@ public class TidalVendrick extends Vendrick {
 
     @Override
     public String getDistortion(){ return "Tidal";}
+
+    public ArrayList<Entity> getSheilds() {
+        return sheilds;
+    }
+
+    public void removeSheilds() {
+        for (Entity e : getSheilds()) {
+            try {
+                e.remove();
+            } catch (Exception ignored) {}
+        }
+    }
+
+    public void setBubbleBomb(BubbleBomb bubbleBomb) {
+        this.bubbleBomb = bubbleBomb;
+    }
+
+    public BubbleBomb getBubbleBomb() {
+        return bubbleBomb;
+    }
 }

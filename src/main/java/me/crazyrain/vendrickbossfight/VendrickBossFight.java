@@ -5,6 +5,7 @@ import me.crazyrain.vendrickbossfight.Commands.FightCommands;
 import me.crazyrain.vendrickbossfight.attacks.*;
 import me.crazyrain.vendrickbossfight.distortions.dark.DarkEvents;
 import me.crazyrain.vendrickbossfight.distortions.dark.DarkRuneHandler;
+import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.distortions.dark.VendrickTNT;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.FlameSpiritEvents;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.StormSpiritEvents;
@@ -13,11 +14,13 @@ import me.crazyrain.vendrickbossfight.distortions.dark.spirits.TsunamiCountdown;
 import me.crazyrain.vendrickbossfight.distortions.flaming.FlameEvents;
 import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
 import me.crazyrain.vendrickbossfight.distortions.stormy.StormyEvents;
+import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TideEvents;
 import me.crazyrain.vendrickbossfight.functionality.*;
 import me.crazyrain.vendrickbossfight.inventories.ClickEvents;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -60,7 +63,7 @@ public final class VendrickBossFight extends JavaPlugin {
         plugin = this;
         this.saveDefaultConfig();
         log = VendrickBossFight.getPlugin(VendrickBossFight.class).getLogger();
-        log.log(Level.INFO, "Plugin is online." + ChatColor.RED + " Vendrick awaits.");
+        log.log(Level.INFO, "Plugin is online." + Color.RED + " Vendrick awaits.");
 
         LANG = loadLang();
         ItemManager.Init();
@@ -85,7 +88,7 @@ public final class VendrickBossFight extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ClickEvents(), this);
         getServer().getPluginManager().registerEvents(new VendrickTNT(), this);
         getServer().getPluginManager().registerEvents(new DarkEvents(this), this);
-        getServer().getPluginManager().registerEvents(new FlameSpiritEvents(), this);
+        getServer().getPluginManager().registerEvents(new FlameSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new TideSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new StormSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new VenArmourEvents(this), this);
@@ -115,15 +118,19 @@ public final class VendrickBossFight extends JavaPlugin {
             vendrick.getVendrick().remove();
             try {
                 runeHandler.clearStand();
-            } catch (Exception e){
-            }
+            } catch (Exception ignored) {}
             try {
                 hurricane.removeBar();
-            } catch (Exception e){
-            }
+            } catch (Exception ignored) {}
             try {
                 countdown.removeBars();
-            } catch (Exception e){}
+            } catch (Exception ignored) {}
+            try {
+                ((TidalVendrick) vendrick).removeSheilds();
+            } catch (Exception ignored) {}
+            try {
+                ((DarkVendrick) vendrick).getSpirit().removeSpirit();
+            } catch (Exception ignored) {}
         }
     }
 

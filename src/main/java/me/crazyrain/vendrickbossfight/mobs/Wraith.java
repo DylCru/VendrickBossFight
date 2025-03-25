@@ -47,53 +47,57 @@ public class Wraith {
 
     public void wraithAnimations(){
         new BukkitRunnable(){
-            int r = 0;
-            int g = 0;
-            int b = 0;
-            boolean up = true;
 
-            int atkCooldown = 35;
-            boolean attacked = false;
             @Override
             public void run() {
                 if (skele.isDead()){
                     cancel();
                 }
-                LeatherArmorMeta meta = (LeatherArmorMeta) wraithChestPlate.getItemMeta();
-                meta.setColor(Color.fromRGB(r,g,b));
-                wraithChestPlate.setItemMeta(meta);
-                skele.getEquipment().setChestplate(wraithChestPlate);
 
-                if (up){
-                    r += 10; g += 10; b += 10;
-                } else {
-                    r -= 10; g -= 10; b -= 10;
-                }
+                //TODO: Maybe add the chestplate animation back in
+//            int r = 0;
+//            int g = 0;
+//            int b = 0;
+//            boolean up = true;
+//
+//            int atkCooldown = 35;
+//            boolean attacked = false;
 
-                if (r >= 250 && up){
-                    up = false;
-                } else if (r <= 0 && !up){
-                    up = true;
-                }
-
-                if (!attacked){
-                    for (Entity e : skele.getNearbyEntities(1,1,1)){
-                        if (e instanceof Player){
-                            Player p = (Player) e;
-                            p.damage(10, skele);
-                            attacked = true;
-                        }
-                    }
-                }
-
-                if (attacked){
-                    atkCooldown -= 1;
-                    if (atkCooldown == 0){
-                        attacked = false;
-                        atkCooldown = 35;
-                    }
-                }
-
+//                LeatherArmorMeta meta = (LeatherArmorMeta) wraithChestPlate.getItemMeta();
+//                meta.setColor(Color.fromRGB(r,g,b));
+//                wraithChestPlate.setItemMeta(meta);
+//                skele.getEquipment().getChestplate().setItemMeta(wraithChestPlate.getItemMeta());
+//
+//                if (up){
+//                    r += 10; g += 10; b += 10;
+//                } else {
+//                    r -= 10; g -= 10; b -= 10;
+//                }
+//
+//                if (r >= 250 && up){
+//                    up = false;
+//                } else if (r <= 0 && !up){
+//                    up = true;
+//                }
+//
+//                if (!attacked){
+//                    for (Entity e : skele.getNearbyEntities(1,1,1)){
+//                        if (e instanceof Player){
+//                            Player p = (Player) e;
+//                            p.damage(10, skele);
+//                            attacked = true;
+//                        }
+//                    }
+//                }
+//
+//                if (attacked){
+//                    atkCooldown -= 1;
+//                    if (atkCooldown == 0){
+//                        attacked = false;
+//                        atkCooldown = 35;
+//                    }
+//                }
+//
 
                 skele.getLocation().getWorld().spawnParticle(Particle.SPELL_WITCH, skele.getLocation().add(0, 0.5, 0), 2);
             }

@@ -1,5 +1,8 @@
 package me.crazyrain.vendrickbossfight.Commands;
 
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSkipSpiritEvent;
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.attacks.PigBombs;
 import me.crazyrain.vendrickbossfight.attacks.PortalWraiths;
@@ -86,35 +89,24 @@ public class FightCommands implements CommandExecutor {
                 }
                 else if (args[0].equalsIgnoreCase("skip") || args[0].equalsIgnoreCase("sk")){
                     if (plugin.venSpawned){
+                        if (!plugin.vendrick.getSkipable()){
+                            player.sendMessage(venPrefix + ChatColor.RED + " Wait for the attack to be ready before skipping!");
+                            return true;
+                        }
                         switch (plugin.vendrick.getPhase()){
                             case 0:
                                 player.sendMessage(venPrefix + ChatColor.RED + " Vendrick isn't attacking currently.");
                                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
                                 return true;
                             case 1:
-                                if (!plugin.vendrick.getSkipable()){
-                                    player.sendMessage(venPrefix + ChatColor.RED + " Wait for the attack to be ready before skipping!");
-                                    return true;
-                                }
-
                                 PortalWraiths wraiths = new PortalWraiths(plugin);
                                 wraiths.skipAttack();
                                 break;
                             case 2:
-                                if (!plugin.vendrick.getSkipable()){
-                                    player.sendMessage(venPrefix + ChatColor.RED + " Wait for the attack to be ready before skipping!");
-                                    return true;
-                                }
-
                                 PigBombs bombs = new PigBombs(plugin);
                                 bombs.skipAttack();
                                 break;
                             case 3:
-                                if (!plugin.vendrick.getSkipable()){
-                                    player.sendMessage(venPrefix + ChatColor.RED + " Wait for the attack to be ready before skipping!");
-                                    return true;
-                                }
-
                                 for (Entity e : plugin.vendrick.getVendrick().getNearbyEntities(30,30,30)){
                                     if (e.hasMetadata("Growth")){
                                         e.getWorld().spawnParticle(Particle.SPELL_WITCH, e.getLocation(), 3);
@@ -122,6 +114,16 @@ public class FightCommands implements CommandExecutor {
                                     }
                                 }
                                 plugin.vendrick.stopAttack();
+                                break;
+                            case 5:
+                                ((TidalVendrick) plugin.vendrick).getBubbleBomb().stopAttack();
+                                plugin.vendrick.stopAttack();
+                                break;
+                            case 6:
+                                DarkVendrick vendrick = (DarkVendrick) plugin.vendrick;
+                                Bukkit.getPluginManager().callEvent(new VendrickSkipSpiritEvent(vendrick.getSpirit().getMetadata()));
+                                plugin.vendrick.stopAttack();
+                                plugin.runeHandler.setPaused(false);
                                 break;
                             }
                         for (UUID id : plugin.fighting){
@@ -135,6 +137,12 @@ public class FightCommands implements CommandExecutor {
                 }
                 else if (args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("st")){
                     if (plugin.venSpawned){
+                        if (plugin.vendrick.getDistortion().equalsIgnoreCase("dark")) {
+                            if (((DarkVendrick) plugin.vendrick).isDead()) {
+                                player.sendMessage(venPrefix + ChatColor.RED + " You cannot end the fight now, wait for the cutscene to end.");
+                                return true;
+                            }
+                        }
                         if (plugin.vendrick.getPhase() == 0){
                             for (Bar bar : plugin.bars){
                                 bar.remove();
@@ -146,6 +154,7 @@ public class FightCommands implements CommandExecutor {
                             plugin.vendrick.getVendrick().remove();
                             plugin.fighting.clear();
                             plugin.pInv.clear();
+                            Bukkit.getPluginManager().callEvent(new VendrickFightStopEvent(null, null, null, plugin.vendrick.getDistortion(), plugin.vendrick.getDifficulty()));
                             plugin.venSpawned = false;
 
                             try {

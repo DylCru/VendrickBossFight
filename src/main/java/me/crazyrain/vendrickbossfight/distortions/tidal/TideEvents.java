@@ -1,13 +1,11 @@
 package me.crazyrain.vendrickbossfight.distortions.tidal;
 
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.functionality.AttackCharge;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.*;
@@ -19,10 +17,8 @@ import java.util.UUID;
 public class TideEvents implements Listener {
 
     VendrickBossFight plugin;
-    Tsunami tsunami;
 
     boolean removing = false;
-    boolean waving = false;
     boolean spawnSquids = false;
 
     public TideEvents(VendrickBossFight plugin){
@@ -45,44 +41,8 @@ public class TideEvents implements Listener {
                 if (!removing){
                     removeSpeed(e.getDamager());
                 }
-
-                if (!waving){
-                    int chance = (int) (Math.random() * 17);
-
-                    if (chance >= 13){
-                        for (UUID p : plugin.fighting){
-                            AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Tsunami", Bukkit.getPlayer(p));
-                            startWave(e.getEntity());
-                            tsunami = new Tsunami(plugin.vendrick, plugin.fighting);
-                            waving = true;
-                        }
-                    }
-                }
             }
         }
-    }
-
-    public void startWave(Entity e){
-        new BukkitRunnable(){
-            int count = 0;
-            float pitch = 0.0f;
-            @Override
-            public void run() {
-                if (count == 5){
-                    tsunami.spawnWaves();
-                    e.getWorld().spawnParticle(Particle.WATER_SPLASH, e.getLocation(), 20);
-                    e.getWorld().playSound(e.getLocation(), Sound.ENTITY_HOSTILE_SPLASH, 3.0f, 2.0f);
-                    waving = false;
-                    cancel();
-                }
-
-                e.getWorld().playSound(e.getLocation(), Sound.ENTITY_HOSTILE_SPLASH, 2.0f, pitch);
-                e.getWorld().spawnParticle(Particle.WATER_SPLASH, e.getLocation(), 20);
-
-                count++;
-                pitch += 0.5;
-            }
-        }.runTaskTimer(plugin, 0, 10);
     }
 
     public void removeSpeed(Entity e){
@@ -111,17 +71,6 @@ public class TideEvents implements Listener {
         }.runTaskTimer(plugin, 0, 20 * 3);
     }
 
-    //remove tidal wave blocks
-    @EventHandler
-    public void removeWave(EntityChangeBlockEvent e){
-        if (e.getEntity().getType() == EntityType.FALLING_BLOCK){
-            FallingBlock fb = (FallingBlock) e.getEntity();
-            if (fb.getBlockData().getMaterial() == Material.BLUE_STAINED_GLASS){
-                e.setCancelled(true);
-            }
-        }
-    }
-
     @EventHandler
     public void killShield(EntityDamageByEntityEvent e){
         if (e.getEntity().hasMetadata("SquidShield")){
@@ -145,19 +94,22 @@ public class TideEvents implements Listener {
     }
 
     @EventHandler
-    public void resetVariables(EntityDeathEvent e){
-        if (e.getEntity().hasMetadata("Vendrick")){
-            removing = false;
-            waving = false;
-            spawnSquids = false;
-
-            for (Entity en : e.getEntity().getNearbyEntities( 40, 40, 40)){
-                if (en.hasMetadata("SquidShield")){
-                    en.remove();
-                }
-            }
-            plugin.squids = 4;
+    public void onVendrickDeath(EntityDeathEvent e){
+        if (e.getEntity().hasMetadata("Vendrick") && plugin.vendrick.getDistortion().equalsIgnoreCase("tidal")){
+            resetVariables();
         }
+    }
+
+    public void resetVariables() {
+        removing = false;
+        spawnSquids = false;
+
+        for (Entity squid : ((TidalVendrick) plugin.vendrick).getSheilds()) {
+            try {
+                squid.remove();
+            } catch (Exception ignored) {}
+        }
+        plugin.squids = 0;
     }
 
     @EventHandler
@@ -169,5 +121,10 @@ public class TideEvents implements Listener {
         }
     }
 
-
+    @EventHandler
+    public void clearSquidsOnFightStop(VendrickFightStopEvent e) {
+        if (e.getDistortion().equalsIgnoreCase("tidal")) {
+            resetVariables();
+        }
+    }
 }

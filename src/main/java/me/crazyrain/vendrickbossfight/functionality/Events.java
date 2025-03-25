@@ -6,13 +6,16 @@ import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.attacks.*;
 import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.distortions.flaming.FlamingVendrick;
+import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
 import me.crazyrain.vendrickbossfight.distortions.stormy.StormyVendrick;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.Color;
 import org.bukkit.boss.BarColor;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -20,9 +23,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -60,7 +61,7 @@ public class Events implements Listener {
             if (e.getEntity().getThrower() == null) {
                 return;
             }
-            if (Objects.requireNonNull(e.getEntity().getItemStack().getItemMeta()).getDisplayName().contains(Lang.STARNAME.toString())) {
+            if (e.getEntity().getItemStack().getItemMeta().getEnchants().containsKey(Enchantment.ARROW_INFINITE) && e.getEntity().getItemStack().getType().equals(Material.NETHER_STAR)) {
                 Player player = Bukkit.getPlayer(e.getEntity().getThrower());
                 starDropped = true;
                 new BukkitRunnable() {
@@ -316,12 +317,23 @@ public class Events implements Listener {
                         for (Bar bar : plugin.bars){
                             bar.fill(0.50);
                         }
-                        PigBombs pigBombs = new PigBombs(plugin);
-                        pigBombs.init(plugin.vendrick, plugin.fighting);
-                        plugin.vendrick.startAttack(2);
-                        for (UUID id : plugin.fighting){
-                            AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
-                            Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                        if (e.getEntity().getScoreboardTags().contains("venTide")) {
+                            plugin.vendrick.startAttack(5);
+                            BubbleBomb bomb = new BubbleBomb(e.getEntity().getLocation(), plugin, plugin.fighting);
+                            ((TidalVendrick) plugin.vendrick).setBubbleBomb(bomb);
+                            bomb.startAttack();
+                            for (UUID id : plugin.fighting){
+                                AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));
+                                Bukkit.getPlayer(id).sendMessage(Lang.BUBBLE.toString());
+                            }
+                        } else {
+                            PigBombs pigBombs = new PigBombs(plugin);
+                            pigBombs.init(plugin.vendrick, plugin.fighting);
+                            plugin.vendrick.startAttack(2);
+                            for (UUID id : plugin.fighting){
+                                AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
+                                Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                            }
                         }
                     }
                 }
@@ -359,7 +371,7 @@ public class Events implements Listener {
                                                 cancel();
                                             }
                                         }
-                                    }.runTaskTimer(plugin, 0, 20 * 2);
+                                    }.runTaskTimer(plugin, 0, 20 * 3);
                             }
                         }.runTaskLater(plugin, 20 * 11);
                     }
@@ -395,14 +407,24 @@ public class Events implements Listener {
                                 break;
                             case 1:
                                 if (!(attacking) && !(percent == 0.50)) {
-                                    PigBombs pigBombs = new PigBombs(plugin);
-                                    pigBombs.init(plugin.vendrick, plugin.fighting);
-                                    plugin.vendrick.startAttack(2);
-                                    attacking = true;
-                                    for (UUID id : plugin.fighting){
-                                        AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
-                                        Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                                    if (e.getEntity().getScoreboardTags().contains("venTide")) {
+                                        plugin.vendrick.startAttack(2);
+                                        BubbleBomb bomb = new BubbleBomb(e.getEntity().getLocation(), plugin, plugin.fighting);
+                                        bomb.startAttack();
+                                        for (UUID id : plugin.fighting){
+                                            AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));
+                                            Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                                        }
+                                    } else {
+                                        PigBombs pigBombs = new PigBombs(plugin);
+                                        pigBombs.init(plugin.vendrick, plugin.fighting);
+                                        plugin.vendrick.startAttack(2);
+                                        for (UUID id : plugin.fighting){
+                                            AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
+                                            Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
+                                        }
                                     }
+                                    attacking = true;
                                     try{
                                         plugin.runeHandler.setPaused(true);
                                     } catch (Exception ignored){}
@@ -444,10 +466,14 @@ public class Events implements Listener {
                             }
                         }
 
+                        plugin.bars.forEach(bar -> {
+                            bar.fill(0.0);
+                        });
 
                         e.getDrops().clear();
 
                         eventCalled = false;
+                        plugin.venSpawned = false;
 
                         if (plugin.getConfig().getBoolean("skip-cutscene")){
                             new BukkitRunnable(){
@@ -460,7 +486,6 @@ public class Events implements Listener {
                                     plugin.getServer().getPluginManager().callEvent(new VendrickFightStopEvent(plugin.fighting, plugin.fighting, plost
                                             ,plugin.vendrick.getDistortion(), plugin.vendrick.getDifficulty()));
                                     lost = false;
-                                    plugin.venSpawned = false;
                                     plugin.fighting.clear();
                                 }
                             }.runTaskLater(plugin, 40);
@@ -505,7 +530,6 @@ public class Events implements Listener {
                                             }
                                             victory(Bukkit.getPlayer(id));
                                             lost = false;
-                                            plugin.venSpawned = false;
                                             plugin.fighting.clear();
                                             cancel();
                                     }
@@ -525,7 +549,7 @@ public class Events implements Listener {
         plugin.pInv.clear();
 
         for (Entity e : player.getNearbyEntities(100, 100, 100)) {
-            if (e.hasMetadata("Wraith")) {
+            if (e.hasMetadata("Wraith") || e.hasMetadata("SquidShield")) {
                 e.remove();
             }
         }
@@ -581,7 +605,7 @@ public class Events implements Listener {
 
         Location deathLoc = plugin.vendrick.getVendrick().getLocation();
         for (Entity en : deathLoc.getWorld().getNearbyEntities(deathLoc, 50,50,50)){
-            if (en.hasMetadata("Wraith") || en.hasMetadata("Portal") || en.getScoreboardTags().contains("venSpirit")){
+            if (en.hasMetadata("Wraith") || en.hasMetadata("Portal") || en.getScoreboardTags().contains("venSpirit") || en.hasMetadata("SquidShield")){
                 if (en.getScoreboardTags().contains("venSpirit")){
                     ((LivingEntity) en).setHealth(0);
                 } else {
@@ -638,7 +662,7 @@ public class Events implements Listener {
                plugin.pInv.remove(e.getPlayer().getUniqueId());
            }
 
-           if (plugin.fighting.size() == 0){
+           if (plugin.fighting.isEmpty()){
                lose();
            }
        }
@@ -651,7 +675,7 @@ public class Events implements Listener {
             plost.add(e.getPlayer().getUniqueId());
             plugin.fighting.remove(e.getPlayer().getUniqueId());
 
-            if (plugin.fighting.size() == 0){
+            if (plugin.fighting.isEmpty()){
                 lose();
             }
         }
@@ -718,17 +742,14 @@ public class Events implements Listener {
                 put(7, ItemManager.eternalFragment);
             }});
             checkCraft(ItemManager.nutrimentU, e.getInventory(), new HashMap<Integer, ItemStack>() {{
-                for (int i = 0; i < 6; i++){
+                for (int i = 0; i < 9; i++){
                     if (i == 4 || i == 1){
                         continue;
                     }
                     put(i, ItemManager.eternalFragment);
                 }
-                put(6, ItemManager.infinium);
-                put(8, ItemManager.infinium);
-                put(7, ItemManager.eternalFragment);
                 put(1, ItemManager.nutrimentOfTheInfinite);
-                put(4, ItemManager.oven);
+                put(4, ItemManager.lusciousApple);
             }});
             checkCraft(ItemManager.flamingStar, e.getInventory(), new HashMap<Integer, ItemStack>(){{
                 put(3, ItemManager.flameCore);
@@ -767,6 +788,11 @@ public class Events implements Listener {
                 put(8, ItemManager.eternalFragment);
                 put(1, new ItemStack(Material.END_CRYSTAL));
                 put(7, new ItemStack(Material.END_CRYSTAL));
+            }});
+            checkCraft(ItemManager.enchantedInfinium, e.getInventory(), new HashMap<>(){{
+                put(1, ItemManager.infinium);
+                put(4, ItemManager.plasmaTorch);
+                put(7, ItemManager.infinium);
             }});
             checkCraft(ItemManager.venHead, e.getInventory(), new HashMap<>() {{
                 put(0, ItemManager.enchantedInfinium);
@@ -807,6 +833,16 @@ public class Events implements Listener {
                 put(4, ItemManager.eternalStar);
                 put(1, ItemManager.theCatalyst);
             }});
+            checkCraft(null, e.getInventory(), new HashMap<>() {{
+                for (int i = 0; i < 9; i++) {
+                    put(i, ItemManager.infinium);
+                }
+            }});
+            checkCraft(null, e.getInventory(), new HashMap<>() {{
+                for (int i = 0; i < 9; i++) {
+                    put(i, ItemManager.enchantedInfinium);
+                }
+            }});
         }
     }
     public void checkCraft(ItemStack result, CraftingInventory inv, HashMap<Integer, ItemStack> ingredients){
@@ -823,6 +859,43 @@ public class Events implements Listener {
             }
         }
         inv.setResult(result);
+    }
+
+    @EventHandler
+    public void preventVanillaCrafting(PrepareItemCraftEvent e) {
+        boolean hasCustom = false;
+        boolean hasVanilla = false;
+        boolean hasBoots = false;
+        int customItemsInCraft = 0;
+        for (ItemStack item : e.getInventory().getMatrix()) {
+            if (item != null) {
+                ItemStack single = item.clone();
+                single.setAmount(1);
+                if (ArrayUtils.contains(ItemManager.allItems, single)) {
+                    customItemsInCraft++;
+                }
+                if (single.equals(ItemManager.venBoots)) {
+                    hasBoots = true;
+                }
+            }
+        }
+        if (customItemsInCraft == 1 || hasBoots) {
+            e.getInventory().setResult(null);
+        }
+        for (ItemStack item : e.getInventory().getMatrix()) {
+            if (item != null) {
+                if (ArrayUtils.contains(ItemManager.allItems, item)) {
+                    hasCustom = true;
+                } else {
+                    if (!item.getType().equals(Material.GOLDEN_APPLE) && !item.getType().equals(Material.END_CRYSTAL)) {
+                        hasVanilla = true;
+                    }
+                }
+            }
+        }
+        if (hasCustom && hasVanilla) {
+            e.getInventory().setResult(null);
+        }
     }
 
 
@@ -894,13 +967,39 @@ public class Events implements Listener {
     @EventHandler
     public void stopWavePickup(EntityPickupItemEvent e){
         if (plugin.venSpawned){
-            if (e.getItem().getItemStack().getType().equals(Material.BLUE_STAINED_GLASS)){
+            if (e.getItem().getItemStack().getType().equals(Material.ICE)){
                 e.getItem().remove();
                 e.setCancelled(true);
             }
         }
     }
 
+    @EventHandler
+    public void preventSheepDyeing(SheepDyeWoolEvent e) {
+        Player player = e.getPlayer();
+        ItemStack stack = e.getPlayer().getEquipment().getItemInMainHand().clone();
+        stack.setAmount(1);
+        if (ArrayUtils.contains(ItemManager.allItems, stack)) {
+            e.setCancelled(true);
+        }
+    }
 
+    @EventHandler
+    public void preventCatalystOnObsidian(PlayerInteractEvent e) {
+        Player player = e.getPlayer();
+        if (player.getEquipment().getItemInMainHand().equals(ItemManager.theCatalyst)) {
+            if (e.getClickedBlock() != null) {
+                if (e.getClickedBlock().getType().equals(Material.OBSIDIAN) || e.getClickedBlock().getType().equals(Material.BEDROCK)) {
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
 
+//    @EventHandler
+//    public void lootRollTest(PlayerInteractEvent e) {
+//        e.getPlayer().sendMessage("Loot Roll:");
+//        LootHandler loot = new LootHandler();
+//        loot.lootRoll(e.getPlayer(), 5);
+//    }
 }

@@ -1,7 +1,10 @@
 package me.crazyrain.vendrickbossfight.distortions.dark.spirits;
 
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSkipSpiritEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -108,8 +111,8 @@ public class TideSpiritEvents implements Listener {
 
         Entity spirit = e.getEntity();
 
-        int spawnChance = (int) (Math.random() * 8);
-        if (spawnChance == 7){
+        int spawnChance = (int) (Math.random() * 100);
+        if (spawnChance == 93){
             double mobType = Math.random();
 
             List<Location> spawnLocs = new ArrayList<>();
@@ -168,4 +171,21 @@ public class TideSpiritEvents implements Listener {
         }
     }
 
+    @EventHandler
+    public void onSpiritSkipped(VendrickSkipSpiritEvent e) {
+        if (!e.getSpiritData().equalsIgnoreCase("ven_spirit_tide")) {
+            return;
+        }
+        try {
+            plugin.countdown.removeBars();
+            plugin.countdown.setActive(false);
+        } catch (Exception ignored) {}
+        for (Entity g : ((DarkVendrick) plugin.vendrick).getSpirit().spirit.getNearbyEntities(50,50,50)){
+            if (g.getType().equals(EntityType.GUARDIAN) || g.getType().equals(EntityType.ELDER_GUARDIAN) || g.getType().equals(EntityType.DROWNED)){
+                g.getWorld().spawnParticle(Particle.SPELL_WITCH, g.getLocation(), 5);
+                g.remove();
+            }
+        }
+        ((DarkVendrick) plugin.vendrick).getSpirit().removeSpirit();
+    }
 }

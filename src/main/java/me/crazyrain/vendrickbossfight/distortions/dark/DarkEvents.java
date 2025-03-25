@@ -16,6 +16,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -57,6 +58,10 @@ public class DarkEvents implements Listener {
             plugin.runeHandler.setActive(false);
             plugin.runeHandler.clearStand();
             plugin.runeHandler = null;
+            plugin.bars.forEach(bar -> {
+                bar.fill(0.0);
+            });
+            ((DarkVendrick) plugin.vendrick).setDead(true);
 
             if (!plugin.getConfig().getBoolean("skip-dark-cutscene")){
                 e.getEntity().setHealth(1);
@@ -81,6 +86,13 @@ public class DarkEvents implements Listener {
                 }.runTaskLater(plugin, 40);
             }
         }
+    }
+
+    @EventHandler
+    public void clearSpiritsOnDeath(PlayerDeathEvent e) {
+        try {
+            ((DarkVendrick) plugin.vendrick).getSpirit().removeSpirit();
+        } catch (Exception ignored) {}
     }
 
     private void endText(LivingEntity e, Location loc){
@@ -122,6 +134,7 @@ public class DarkEvents implements Listener {
                             eKing.setGlowing(true);
                             eKing.setInvulnerable(true);
                             eKing.setCustomName(ChatColor.DARK_GRAY + "" + ChatColor.BOLD + "Eternal King");
+                            eKing.setMetadata("ven-e-king", new FixedMetadataValue(plugin, "ven-e-king"));
                             loc.getWorld().playSound(loc, Sound.ENTITY_WITHER_SPAWN, 1.0f, 0.9f);
                             break;
                         case 7:
@@ -322,6 +335,8 @@ public class DarkEvents implements Listener {
             public void run() {
                 DistSpirit spirit = new DistSpirit(loc, type);
                 spirit.spawnMob();
+                ((DarkVendrick) plugin.vendrick).setSpirit(spirit);
+                plugin.vendrick.setSkipable(true);
                 Bukkit.getPluginManager().callEvent(new VendrickSpiritSpawnEvent(type, plugin.fighting, spirit.getSpirit()));
             }
         }.runTaskLater(VendrickBossFight.plugin, 20 * 7);

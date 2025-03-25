@@ -1,6 +1,8 @@
 package me.crazyrain.vendrickbossfight.distortions.dark.spirits;
 
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSkipSpiritEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.distortions.flaming.Inferno;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -20,9 +22,12 @@ public class FlameSpiritEvents implements Listener {
     ArmorStand flameBomb;
     boolean flameBombActive = false;
     Boolean flameBombDestroyed = false;
-    int flameBombHealth = 5;
+    int flameBombHealth = 3;
     boolean infernoing = false;
     Inferno inferno;
+    VendrickBossFight plugin;
+
+    public FlameSpiritEvents (VendrickBossFight plugin) { this.plugin = plugin; }
 
     @EventHandler
     public void onPlayerHitFlameSpirit(EntityDamageByEntityEvent e){
@@ -179,5 +184,14 @@ public class FlameSpiritEvents implements Listener {
         if (!(e.getEntity() instanceof Player)) {return;}
 
         e.getEntity().setFireTicks(60);
+    }
+
+    @EventHandler
+    public void onSpiritSkipped(VendrickSkipSpiritEvent e) {
+        if (!e.getSpiritData().equalsIgnoreCase("ven_spirit_flame")) {
+            return;
+        }
+
+        ((DarkVendrick) plugin.vendrick).getSpirit().removeSpirit();
     }
 }
