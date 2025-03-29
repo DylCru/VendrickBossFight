@@ -1,5 +1,6 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
@@ -10,6 +11,7 @@ import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
 import me.crazyrain.vendrickbossfight.distortions.stormy.StormyVendrick;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
@@ -833,6 +835,11 @@ public class Events implements Listener {
                 put(4, ItemManager.eternalStar);
                 put(1, ItemManager.theCatalyst);
             }});
+            checkCraft(ItemManager.voidCore, e.getInventory(), new HashMap<>(){{
+                put(0, ItemManager.voidCoreFragment);
+                put(1, ItemManager.voidCoreFragment);
+                put(2, ItemManager.voidCoreFragment);
+            }});
             checkCraft(null, e.getInventory(), new HashMap<>() {{
                 for (int i = 0; i < 9; i++) {
                     put(i, ItemManager.infinium);
@@ -996,10 +1003,12 @@ public class Events implements Listener {
         }
     }
 
-//    @EventHandler
-//    public void lootRollTest(PlayerInteractEvent e) {
-//        e.getPlayer().sendMessage("Loot Roll:");
-//        LootHandler loot = new LootHandler();
-//        loot.lootRoll(e.getPlayer(), 5);
-//    }
+    @EventHandler
+    public void lootRollTest(PlayerInteractEvent e) {
+        Bukkit.broadcastMessage("\n");
+        String id = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_ID");
+        Bukkit.broadcastMessage(id);
+        String type = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE");
+        Bukkit.broadcastMessage(type);
+    }
 }

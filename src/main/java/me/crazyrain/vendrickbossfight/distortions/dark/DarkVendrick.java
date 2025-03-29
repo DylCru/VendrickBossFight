@@ -1,11 +1,9 @@
 package me.crazyrain.vendrickbossfight.distortions.dark;
 
-import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.DistSpirit;
-import me.crazyrain.vendrickbossfight.functionality.ItemManager;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Sound;

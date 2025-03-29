@@ -1,14 +1,10 @@
 package me.crazyrain.vendrickbossfight.Commands;
 
-import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.attacks.PortalWraiths;
-import me.crazyrain.vendrickbossfight.distortions.dark.spirits.DistSpirit;
-import me.crazyrain.vendrickbossfight.distortions.dark.spirits.TsunamiCountdown;
 import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
-import me.crazyrain.vendrickbossfight.functionality.ItemManager;
+import me.crazyrain.vendrickbossfight.items.ItemID;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
-import me.crazyrain.vendrickbossfight.functionality.LootHandler;
 import me.crazyrain.vendrickbossfight.inventories.ClickEvents;
 import me.crazyrain.vendrickbossfight.inventories.VenInventory;
 import me.crazyrain.vendrickbossfight.mobs.Growth;
@@ -21,12 +17,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
-import javax.sound.sampled.Port;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -70,6 +62,9 @@ public class Commands implements CommandExecutor {
                         player.sendMessage("");
                         player.sendMessage(ChatColor.AQUA + "/ven refresh - Hold a Vendrick item to update it to it's latest version");
 
+                    } else if (args[0].equalsIgnoreCase("test")) {
+                        player.getInventory().addItem(ItemID.getItemStackById(args[1]));
+                        player.updateInventory();
                     } else if (args[0].equalsIgnoreCase("items") || args[0].equalsIgnoreCase("i")){
                         VenInventory inv = new VenInventory("Vendrick Items: All", ItemManager.allItems, 1, false);
                         player.openInventory(inv.getInventory());

@@ -2,7 +2,7 @@ package me.crazyrain.vendrickbossfight.npcs;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.functionality.ItemManager;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

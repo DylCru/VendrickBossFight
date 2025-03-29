@@ -1,7 +1,7 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.npcs.EternalTrader;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.MaterialTrader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

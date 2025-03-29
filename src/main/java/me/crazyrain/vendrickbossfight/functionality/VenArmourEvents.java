@@ -1,7 +1,7 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import org.bukkit.Bukkit;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;

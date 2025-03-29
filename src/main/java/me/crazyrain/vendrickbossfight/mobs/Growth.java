@@ -1,7 +1,7 @@
 package me.crazyrain.vendrickbossfight.mobs;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.functionality.ItemManager;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;

@@ -1,12 +1,11 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.DistortedTrader;
-import me.crazyrain.vendrickbossfight.npcs.EternalTrader;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

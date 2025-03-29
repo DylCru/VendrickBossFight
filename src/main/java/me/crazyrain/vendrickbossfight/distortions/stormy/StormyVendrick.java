@@ -2,7 +2,7 @@ package me.crazyrain.vendrickbossfight.distortions.stormy;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.functionality.ItemManager;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
