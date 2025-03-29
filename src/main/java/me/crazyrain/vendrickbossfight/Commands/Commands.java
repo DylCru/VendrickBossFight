@@ -63,6 +63,10 @@ public class Commands implements CommandExecutor {
                         player.sendMessage(ChatColor.AQUA + "/ven refresh - Hold a Vendrick item to update it to it's latest version");
 
                     } else if (args[0].equalsIgnoreCase("test")) {
+                        if (args[1].equalsIgnoreCase("recipe")) {
+                            System.out.println(plugin.getCraftManager().getRecipes().toString());
+                            return true;
+                        }
                         player.getInventory().addItem(ItemID.getItemStackById(args[1]));
                         player.updateInventory();
                     } else if (args[0].equalsIgnoreCase("items") || args[0].equalsIgnoreCase("i")){

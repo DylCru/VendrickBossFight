@@ -1,5 +1,6 @@
 package me.crazyrain.vendrickbossfight.items;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -77,10 +78,11 @@ public enum ItemID {
 
     // Method to find an ItemStack by ID
     public static ItemStack getItemStackById(String id) {
-        System.out.println(id);
         ItemID item = ID_MAP.get(id);
-        System.out.println(item);
-        System.out.println(item.getItemStack());
         return (item != null) ? item.getItemStack() : null;
+    }
+
+    public static String getIDByItemStack(ItemStack item) {
+        return NBTEditor.getString(item,NBTEditor.CUSTOM_DATA, "VEN_ITEM_ID");
     }
 }

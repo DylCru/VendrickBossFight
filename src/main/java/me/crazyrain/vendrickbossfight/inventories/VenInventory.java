@@ -23,7 +23,7 @@ public class VenInventory implements InventoryHolder {
     boolean lastPage;
 
     public VenInventory(String title, ItemStack[] contents, int pageNum, boolean lastPage){
-        inv = Bukkit.createInventory(this, 54, title);
+        inv = Bukkit.createInventory(this, 43, title);
         this.contents = contents;
         this.pageNum = pageNum;
         this.lastPage = lastPage;
