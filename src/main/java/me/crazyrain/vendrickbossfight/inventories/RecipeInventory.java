@@ -35,6 +35,7 @@ public class RecipeInventory implements InventoryHolder, Listener {
     }
 
     private void init() {
+        inv.clear();
         for (int i : materialRecipes.get(result).keySet()) {
             inv.setItem(ingSlots[i], materialRecipes.get(result).get(i));
         }
@@ -43,7 +44,7 @@ public class RecipeInventory implements InventoryHolder, Listener {
                 inv.setItem(i, createItem( " ", Material.BLACK_STAINED_GLASS_PANE, null));
             }
         }
-        if (!lastPage) {
+        if (!lastPage && results.length > 1) {
             inv.setItem(44, createItem(ChatColor.GREEN + "Next Page", Material.ARROW, null));
         }
         if (pageNum > 1) {
