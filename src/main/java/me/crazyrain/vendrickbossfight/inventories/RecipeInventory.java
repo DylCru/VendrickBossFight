@@ -1,11 +1,9 @@
 package me.crazyrain.vendrickbossfight.inventories;
 
-import me.crazyrain.vendrickbossfight.CustomEvents.RecipeInventoryNewPageEvent;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -28,6 +26,7 @@ public class RecipeInventory implements InventoryHolder, Listener {
 
     public RecipeInventory(String title, HashMap<ItemStack, HashMap<Integer, ItemStack>> materialRecipes) {
         inv = Bukkit.createInventory(this, 45, title);
+        this.pageNum = 1;
         this.materialRecipes = materialRecipes;
         this.results = materialRecipes.keySet().toArray(new ItemStack[0]);
         result = this.results[0];
@@ -68,14 +67,12 @@ public class RecipeInventory implements InventoryHolder, Listener {
         return inv;
     }
 
-    @EventHandler
-    public void onNewPage(RecipeInventoryNewPageEvent e) {
-        if (e.isForward()) {
+    public void newPage(boolean forward) {
+        if (forward) {
             this.pageNum++;
         } else {
             this.pageNum--;
         }
-
         this.result = this.results[pageNum - 1];
         lastPage = this.pageNum == this.results.length;
         init();

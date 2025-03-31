@@ -74,11 +74,11 @@ public class Commands implements CommandExecutor {
                         player.openInventory(inv.getInventory());
 
                     } else if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")){
+                        plugin.reloadPluginConfig();
                         player.sendMessage(venPrefix + ChatColor.GREEN + " The config has been reloaded!");
-                        plugin.reloadConfig();
-                        plugin.initLocations();
                         player.sendMessage(venPrefix + ChatColor.GRAY + " " + plugin.configSpawnLocs.size() + " Custom spawning locations successfully initialised");
-                        plugin.lootHandler.refreshChances();
+                        player.sendMessage(venPrefix + ChatColor.GRAY + " " + plugin.getCraftManager().getRecipes().size() + " crafting recipes successfully loaded");
+                        if (!plugin.getCraftManager().getFailedRecipes().isEmpty()) player.sendMessage(venPrefix + ChatColor.RED + " " +plugin.getCraftManager().getFailedRecipes().size() + " recipes failed to load " + plugin.getCraftManager().getFailedRecipes());
 
                     } else if(args[0].equalsIgnoreCase("merchant")){
                         if (args.length < 2) {

@@ -20,8 +20,7 @@ import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TideEvents;
 import me.crazyrain.vendrickbossfight.functionality.*;
 import me.crazyrain.vendrickbossfight.inventories.ClickEvents;
-import me.crazyrain.vendrickbossfight.inventories.RecipeClickEvents;
-import me.crazyrain.vendrickbossfight.inventories.RecipeInventory;
+import me.crazyrain.vendrickbossfight.inventories.RecipeInvEvents;
 import me.crazyrain.vendrickbossfight.items.CraftHandler;
 import me.crazyrain.vendrickbossfight.items.CraftManager;
 import me.crazyrain.vendrickbossfight.items.DefaultRecipes;
@@ -29,7 +28,6 @@ import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.bukkit.Particle;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -103,7 +101,7 @@ public final class VendrickBossFight extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new StormSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new VenArmourEvents(this), this);
         getServer().getPluginManager().registerEvents(new CraftHandler(this), this);
-        getServer().getPluginManager().registerEvents(new RecipeClickEvents(), this);
+        getServer().getPluginManager().registerEvents(new RecipeInvEvents(this), this);
 
         getCommand("ven").setExecutor(new Commands(this));
         getCommand("venfight").setExecutor(new FightCommands(this));
@@ -144,6 +142,13 @@ public final class VendrickBossFight extends JavaPlugin {
                 ((DarkVendrick) vendrick).getSpirit().removeSpirit();
             } catch (Exception ignored) {}
         }
+    }
+
+    public void reloadPluginConfig() {
+        reloadConfig();
+        initLocations();
+        getCraftManager().reloadRecipes(getRecipeFile());
+        lootHandler.refreshChances();
     }
 
     public void initLocations(){
@@ -242,13 +247,10 @@ public final class VendrickBossFight extends JavaPlugin {
         return null;
     }
 
-    public void saveDefaultRecipes(Map<String, Map<String, String[]>> recipeData, File file) {
+    public void saveDefaultRecipes(Map<String, Map<String, String[]>> recipeData, File file) throws IOException {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (Writer writer = new FileWriter(file)) {
-            gson.toJson(recipeData, writer);
-        } catch (IOException e) {
-            getLogger().log(Level.SEVERE, "Unable to create recipes.json!");
-        }
+        Writer writer = new FileWriter(file);
+        gson.toJson(recipeData, writer);
     }
 
     public CraftManager getCraftManager() {

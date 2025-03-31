@@ -5,6 +5,7 @@ import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.inventories.RecipeInventory;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,11 +16,14 @@ import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
+import java.util.UUID;
 
 public class CraftHandler implements Listener {
 
     VendrickBossFight plugin;
     HashMap<ItemStack, HashMap<Integer, ItemStack>> recipes;
+
+    static HashMap<UUID, RecipeInventory> openInventories = new HashMap<>();
 
     public CraftHandler(VendrickBossFight plugin){
         this.plugin = plugin;
@@ -74,7 +78,6 @@ public class CraftHandler implements Listener {
                 }
             }
         }
-        Bukkit.broadcastMessage("Set result to item");
         inv.setResult(result);
         return true;
     }
@@ -109,12 +112,18 @@ public class CraftHandler implements Listener {
         if (!NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE").equalsIgnoreCase(ItemType.MATERIAL.getItemType())) {
             return;
         }
+        if (!plugin.getCraftManager().isLoaded()) {
+            e.getPlayer().sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[VENDRICK]" + ChatColor.RESET + ChatColor.RED + " Failed to open the recipes menu. You should report this error to a server administrator.");
+            return;
+        }
+
         ItemStack item = e.getItem().clone();
         item.setAmount(1);
         HashMap<ItemStack, HashMap<Integer, ItemStack>> materialRecipes = plugin.getCraftManager().getAllRecipesForMaterial(item);
 
         RecipeInventory inventory = new RecipeInventory(item.getItemMeta().getDisplayName() + " Recipes", materialRecipes);
-        plugin.getServer().getPluginManager().registerEvents(inventory, plugin);
         e.getPlayer().openInventory(inventory.getInventory());
+        plugin.getCraftManager().addInventoryInstance(e.getPlayer().getUniqueId(), inventory);
+
     }
 }

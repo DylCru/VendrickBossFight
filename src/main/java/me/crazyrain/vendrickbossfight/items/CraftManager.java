@@ -1,26 +1,27 @@
 package me.crazyrain.vendrickbossfight.items;
 
 import jakarta.json.*;
-import org.bukkit.Bukkit;
+import me.crazyrain.vendrickbossfight.inventories.RecipeInventory;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CraftManager {
 
-    private final FileInputStream itemsFile;
+    private FileInputStream itemsFile;
     private final Logger logger;
 
     private final HashMap<ItemStack, HashMap<Integer, ItemStack>> recipes = new HashMap<>();
 
     private final List<String> failed = new ArrayList<>();
+
+    private boolean loaded = false;
+
+    private HashMap<UUID, RecipeInventory> openInventories = new HashMap<>();
 
     public CraftManager (FileInputStream itemsFile, Logger logger) {
         this.logger = logger;
@@ -79,6 +80,7 @@ public class CraftManager {
             if (!ingredients.isEmpty()) recipes.put(result, ingredients);
         }
         logger.log(Level.INFO, "Done! Loaded " + recipes.size() + " crafting recipes");
+        loaded = true;
         if (!failed.isEmpty()) logger.log(Level.WARNING, "Failed to load " + failed.size() + " crafting recipes. " + failed);
     }
 
@@ -110,4 +112,34 @@ public class CraftManager {
         return recipes;
     }
 
+    public HashMap<UUID, RecipeInventory> getOpenInventories() {
+        return openInventories;
+    }
+
+    public void addInventoryInstance(UUID player, RecipeInventory instance) {
+        this.openInventories.put(player, instance);
+    }
+
+    public void removeInventoryInstance(UUID player) {
+        this.openInventories.remove(player);
+    }
+
+    public RecipeInventory getInventoryInstance(UUID player) {
+        return this.openInventories.get(player);
+    }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
+
+    public void reloadRecipes(FileInputStream file) {
+        this.itemsFile = file;
+        this.recipes.clear();
+        this.failed.clear();
+        load();
+    }
+
+    public List<String> getFailedRecipes() {
+        return failed;
+    }
 }

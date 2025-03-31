@@ -91,6 +91,12 @@ public class DefaultRecipes {
                 "", "", ""
         });
 
+        defaultRecipes.put("VEN_VOID_CORE", new String[]{
+                "VEN_VOID_CORE_FRAGMENT","VEN_VOID_CORE_FRAGMENT","VEN_VOID_CORE_FRAGMENT",
+                "","","",
+                "","",""
+        });
+
         defaultRecipes.put("VEN_DARK_STAR", new String[]{
                 "", "VEN_THE_CATALYST", "",
                 "VEN_VOID_CORE", "VEN_ETERNAL_STAR", "VEN_VOID_CORE",
