@@ -811,12 +811,12 @@ public class Events implements Listener {
         }
     }
 
-    @EventHandler
-    public void lootRollTest(PlayerInteractEvent e) {
-        Bukkit.broadcastMessage("\n");
-        String id = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_ID");
-        Bukkit.broadcastMessage(id);
-        String type = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE");
-        Bukkit.broadcastMessage(type);
-    }
+//    @EventHandler
+//    public void lootRollTest(PlayerInteractEvent e) {
+//        Bukkit.broadcastMessage("\n");
+//        String id = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_ID");
+//        Bukkit.broadcastMessage(id);
+//        String type = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE");
+//        Bukkit.broadcastMessage(type);
+//    }
 }

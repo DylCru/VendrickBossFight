@@ -2,6 +2,7 @@ package me.crazyrain.vendrickbossfight.items;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.inventories.RecipeInventory;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -112,6 +113,8 @@ public class CraftHandler implements Listener {
         item.setAmount(1);
         HashMap<ItemStack, HashMap<Integer, ItemStack>> materialRecipes = plugin.getCraftManager().getAllRecipesForMaterial(item);
 
-        e.getPlayer().sendMessage(materialRecipes.toString() + "recipes");
+        RecipeInventory inventory = new RecipeInventory(item.getItemMeta().getDisplayName() + " Recipes", materialRecipes);
+        plugin.getServer().getPluginManager().registerEvents(inventory, plugin);
+        e.getPlayer().openInventory(inventory.getInventory());
     }
 }

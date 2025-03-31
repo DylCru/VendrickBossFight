@@ -20,6 +20,8 @@ import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TideEvents;
 import me.crazyrain.vendrickbossfight.functionality.*;
 import me.crazyrain.vendrickbossfight.inventories.ClickEvents;
+import me.crazyrain.vendrickbossfight.inventories.RecipeClickEvents;
+import me.crazyrain.vendrickbossfight.inventories.RecipeInventory;
 import me.crazyrain.vendrickbossfight.items.CraftHandler;
 import me.crazyrain.vendrickbossfight.items.CraftManager;
 import me.crazyrain.vendrickbossfight.items.DefaultRecipes;
@@ -101,6 +103,7 @@ public final class VendrickBossFight extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new StormSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new VenArmourEvents(this), this);
         getServer().getPluginManager().registerEvents(new CraftHandler(this), this);
+        getServer().getPluginManager().registerEvents(new RecipeClickEvents(), this);
 
         getCommand("ven").setExecutor(new Commands(this));
         getCommand("venfight").setExecutor(new FightCommands(this));

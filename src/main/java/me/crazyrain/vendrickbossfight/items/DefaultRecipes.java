@@ -32,21 +32,21 @@ public class DefaultRecipes {
         });
 
         defaultRecipes.put("VEN_FLAMING_STAR", new String[]{
-                "", "", "",
-                "VEN_THE_CATALYST", "VEN_ETERNAL_STAR", "VEN_FLAME_CORE",
-                "", "VEN_FLAME_CORE", "VEN_FLAME_CORE"
+                "", "VEN_THE_CATALYST", "",
+                "VEN_FLAME_CORE", "VEN_ETERNAL_STAR", "VEN_FLAME_CORE",
+                "", "VEN_FLAME_CORE", ""
         });
 
         defaultRecipes.put("VEN_TIDAL_STAR", new String[]{
-                "", "", "",
-                "VEN_THE_CATALYST", "VEN_ETERNAL_STAR", "VEN_WAVE_CORE",
-                "", "VEN_WAVE_CORE", "VEN_WAVE_CORE"
+                "", "VEN_THE_CATALYST", "",
+                "VEN_WAVE_CORE", "VEN_ETERNAL_STAR", "VEN_WAVE_CORE",
+                "", "VEN_WAVE_CORE", ""
         });
 
         defaultRecipes.put("VEN_STORM_STAR", new String[]{
-                "", "", "",
-                "VEN_THE_CATALYST", "VEN_ETERNAL_STAR", "VEN_VOLTAIC_CORE",
-                "", "VEN_VOLTAIC_CORE", "VEN_VOLTAIC_CORE"
+                "", "VEN_THE_CATALYST", "",
+                "VEN_VOLTAIC_CORE", "VEN_ETERNAL_STAR", "VEN_VOLTAIC_CORE",
+                "", "VEN_VOLTAIC_CORE", ""
         });
 
         defaultRecipes.put("VEN_ENERGY_RIFLE", new String[]{
@@ -92,9 +92,9 @@ public class DefaultRecipes {
         });
 
         defaultRecipes.put("VEN_DARK_STAR", new String[]{
-                "", "", "",
-                "VEN_THE_CATALYST", "VEN_ETERNAL_STAR", "VEN_VOID_CORE",
-                "", "VEN_VOID_CORE", "VEN_VOID_CORE"
+                "", "VEN_THE_CATALYST", "",
+                "VEN_VOID_CORE", "VEN_ETERNAL_STAR", "VEN_VOID_CORE",
+                "", "VEN_VOID_CORE", ""
         });
 
         return defaultRecipes;
