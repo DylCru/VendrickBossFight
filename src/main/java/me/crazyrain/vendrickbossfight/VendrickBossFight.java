@@ -251,6 +251,7 @@ public final class VendrickBossFight extends JavaPlugin {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Writer writer = new FileWriter(file);
         gson.toJson(recipeData, writer);
+        writer.close();
     }
 
     public CraftManager getCraftManager() {

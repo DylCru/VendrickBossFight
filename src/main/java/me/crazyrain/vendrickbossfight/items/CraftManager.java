@@ -50,11 +50,14 @@ public class CraftManager {
         for (Map.Entry<String, JsonValue> value : recipeObject.entrySet()) {
             ItemStack result = ItemID.getItemStackById(value.getKey());
             if (result == null) {
-                logFailedRecipe(value.getKey(), value.getKey());
+                logFailedRecipe(value.getKey(), value.getKey(), true);
                 continue;
             }
             JsonArray ingArray = value.getValue().asJsonArray();
             HashMap<Integer, ItemStack> ingredients = new HashMap<>();
+            if (ingArray.size() != 9) {
+                logFailedRecipe(value.getKey(), value.getKey(), false);
+            }
             for (int i = 0; i < ingArray.size(); i++) {
                 String ing = ingArray.getString(i);
                 if (ing.isEmpty()) {
@@ -65,14 +68,14 @@ public class CraftManager {
                         ItemStack itemStack = new ItemStack(Material.valueOf(ing));
                         ingredients.put(i, itemStack);
                     } catch (IllegalArgumentException e) {
-                        logFailedRecipe(value.getKey(), ing);
+                        logFailedRecipe(value.getKey(), ing, true);
                         break;
                     }
                     continue;
                 }
                 ItemStack venItem = ItemID.getItemStackById(ing);
                 if (venItem == null) {
-                    logFailedRecipe(value.getKey(), ing);
+                    logFailedRecipe(value.getKey(), ing, true);
                 } else {
                     ingredients.put(i, venItem);
                 }
@@ -84,9 +87,12 @@ public class CraftManager {
         if (!failed.isEmpty()) logger.log(Level.WARNING, "Failed to load " + failed.size() + " crafting recipes. " + failed);
     }
 
-    private void logFailedRecipe(String recipe, String ing) {
+    private void logFailedRecipe(String recipe, String ing, boolean parse) {
         failed.add(recipe);
-        logger.log(Level.WARNING,"FAILED TO LOAD RECIPE: " + recipe + " -- Error occurred trying to parse \"" + ing + "\"");
+        if (parse) {
+            logger.log(Level.WARNING,"FAILED TO LOAD RECIPE: " + recipe + " -- Error occurred trying to parse \"" + ing + "\"");
+        }
+        logger.log(Level.WARNING, "FAILED TO LOAD RECIPE: " + recipe + " -- Recipe must be made up of exactly 9 strings");
     }
 
     //TODO: Add getAllRecipesForMaterial(ItemStack material)
