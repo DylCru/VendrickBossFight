@@ -1,5 +1,5 @@
 name: VendrickBossFight
-version: "1.13"
+version: "1.14"
 main: me.crazyrain.vendrickbossfight.VendrickBossFight
 api-version: 1.17
 authors: [ CrazyRain ]

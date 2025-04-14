@@ -2,12 +2,10 @@ package me.crazyrain.vendrickbossfight.functionality;
 
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.EternalTrader;
 import org.bukkit.*;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Marker;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventException;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -17,10 +15,8 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Merchant;
-import org.bukkit.inventory.MerchantInventory;
 import org.bukkit.inventory.MerchantRecipe;
 
-import javax.swing.plaf.metal.MetalCheckBoxIcon;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

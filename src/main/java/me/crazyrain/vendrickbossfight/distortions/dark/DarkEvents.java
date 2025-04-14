@@ -6,7 +6,7 @@ import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.DistSpirit;
 import me.crazyrain.vendrickbossfight.distortions.dark.spirits.SpiritSpawnAnim;
 import me.crazyrain.vendrickbossfight.functionality.Bar;
-import me.crazyrain.vendrickbossfight.functionality.ItemManager;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;

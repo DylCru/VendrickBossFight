@@ -1,5 +1,6 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
@@ -10,6 +11,7 @@ import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
 import me.crazyrain.vendrickbossfight.distortions.stormy.StormyVendrick;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
@@ -712,222 +714,47 @@ public class Events implements Listener {
         }
     }
 
-    //used for custom crafts
-    @EventHandler
-    public void onCraftItem(PrepareItemCraftEvent e){
-        if (plugin.getConfig().getBoolean("can-craft")){
-            if(e.getInventory().getMatrix().length > 9){
-                return;
-            }
-
-            checkCraft(ItemManager.trueEternalHatchet, e.getInventory(), new HashMap<Integer, ItemStack>() {{
-                put(4, ItemManager.vendrickHatchet);
-                put(1, ItemManager.eternalFragment);
-                put(3, ItemManager.eternalFragment);
-                put(5, ItemManager.eternalFragment);
-                put(7, ItemManager.eternalFragment);
-            }});
-            checkCraft(ItemManager.shatterStick, e.getInventory(), new HashMap<Integer, ItemStack>() {{
-                put(4, ItemManager.shatterSpine);
-                put(1, ItemManager.essenceOfEternity);
-                put(3, ItemManager.essenceOfEternity);
-                put(5, ItemManager.essenceOfEternity);
-                put(7, ItemManager.essenceOfEternity);
-            }});
-            checkCraft(ItemManager.nutrimentOfTheInfinite, e.getInventory(), new HashMap<Integer, ItemStack>() {{
-                put(4, new ItemStack(Material.GOLDEN_APPLE));
-                put(1, ItemManager.essenceOfEternity);
-                put(5, ItemManager.essenceOfEternity);
-                put(3, ItemManager.eternalFragment);
-                put(7, ItemManager.eternalFragment);
-            }});
-            checkCraft(ItemManager.nutrimentU, e.getInventory(), new HashMap<Integer, ItemStack>() {{
-                for (int i = 0; i < 9; i++){
-                    if (i == 4 || i == 1){
-                        continue;
-                    }
-                    put(i, ItemManager.eternalFragment);
-                }
-                put(1, ItemManager.nutrimentOfTheInfinite);
-                put(4, ItemManager.lusciousApple);
-            }});
-            checkCraft(ItemManager.flamingStar, e.getInventory(), new HashMap<Integer, ItemStack>(){{
-                put(3, ItemManager.flameCore);
-                put(5, ItemManager.flameCore);
-                put(7, ItemManager.flameCore);
-                put(4, ItemManager.eternalStar);
-                put(1, ItemManager.theCatalyst);
-            }});
-            checkCraft(ItemManager.tidalStar, e.getInventory(), new HashMap<Integer, ItemStack>(){{
-                put(3, ItemManager.waveCore);
-                put(5, ItemManager.waveCore);
-                put(7, ItemManager.waveCore);
-                put(4, ItemManager.eternalStar);
-                put(1, ItemManager.theCatalyst);
-            }});
-            checkCraft(ItemManager.stormStar, e.getInventory(), new HashMap<Integer, ItemStack>(){{
-                put(3, ItemManager.voltaicCore);
-                put(5, ItemManager.voltaicCore);
-                put(7, ItemManager.voltaicCore);
-                put(4, ItemManager.eternalStar);
-                put(1, ItemManager.theCatalyst);
-            }});
-            checkCraft(ItemManager.energyRifle, e.getInventory(), new HashMap<Integer, ItemStack>(){{
-                put(0, ItemManager.infinium);
-                put(1, ItemManager.infinium);
-                put(2, ItemManager.infinium);
-                put(5, ItemManager.fusionChamber);
-                put(8, ItemManager.voltaicCore);
-            }});
-            checkCraft(ItemManager.theCatalyst, e.getInventory(), new HashMap<>() {{
-                put(0, ItemManager.essenceOfEternity);
-                put(3, ItemManager.essenceOfEternity);
-                put(6, ItemManager.essenceOfEternity);
-                put(2, ItemManager.eternalFragment);
-                put(5, ItemManager.eternalFragment);
-                put(8, ItemManager.eternalFragment);
-                put(1, new ItemStack(Material.END_CRYSTAL));
-                put(7, new ItemStack(Material.END_CRYSTAL));
-            }});
-            checkCraft(ItemManager.enchantedInfinium, e.getInventory(), new HashMap<>(){{
-                put(1, ItemManager.infinium);
-                put(4, ItemManager.plasmaTorch);
-                put(7, ItemManager.infinium);
-            }});
-            checkCraft(ItemManager.venHead, e.getInventory(), new HashMap<>() {{
-                put(0, ItemManager.enchantedInfinium);
-                put(1, ItemManager.infinium);
-                put(2, ItemManager.enchantedInfinium);
-                put(3, ItemManager.infinium);
-                put(5, ItemManager.infinium);
-            }});
-            checkCraft(ItemManager.venChest, e.getInventory(), new HashMap<>() {{
-                put(0, ItemManager.enchantedInfinium);
-                put(2, ItemManager.enchantedInfinium);
-                put(3, ItemManager.infinium);
-                put(4, ItemManager.infinium);
-                put(5, ItemManager.infinium);
-                put(6, ItemManager.infinium);
-                put(7, ItemManager.infinium);
-                put(8, ItemManager.infinium);
-            }});
-            checkCraft(ItemManager.venLegs, e.getInventory(), new HashMap<>() {{
-                put(0, ItemManager.enchantedInfinium);
-                put(1, ItemManager.infinium);
-                put(2, ItemManager.enchantedInfinium);
-                put(3, ItemManager.infinium);
-                put(5, ItemManager.infinium);
-                put(6, ItemManager.infinium);
-                put(8, ItemManager.infinium);
-            }});
-            checkCraft(ItemManager.venBoots, e.getInventory(), new HashMap<>() {{
-                put(0, ItemManager.enchantedInfinium);
-                put(2, ItemManager.enchantedInfinium);
-                put(3, ItemManager.infinium);
-                put(5, ItemManager.infinium);
-            }});
-            checkCraft(ItemManager.darkStar, e.getInventory(), new HashMap<>(){{
-                put(3, ItemManager.voidCore);
-                put(5, ItemManager.voidCore);
-                put(7, ItemManager.voidCore);
-                put(4, ItemManager.eternalStar);
-                put(1, ItemManager.theCatalyst);
-            }});
-            checkCraft(null, e.getInventory(), new HashMap<>() {{
-                for (int i = 0; i < 9; i++) {
-                    put(i, ItemManager.infinium);
-                }
-            }});
-            checkCraft(null, e.getInventory(), new HashMap<>() {{
-                for (int i = 0; i < 9; i++) {
-                    put(i, ItemManager.enchantedInfinium);
-                }
-            }});
-        }
-    }
-    public void checkCraft(ItemStack result, CraftingInventory inv, HashMap<Integer, ItemStack> ingredients){
-        ItemStack[] matrix = inv.getMatrix();
-        for(int i = 0; i < 9; i++){
-            if(ingredients.containsKey(i)){
-                if(matrix[i] == null || !matrix[i].equals(ingredients.get(i))){
-                    return;
-                }
-            } else {
-                if(matrix[i] != null){
-                    return;
-                }
-            }
-        }
-        inv.setResult(result);
-    }
-
-    @EventHandler
-    public void preventVanillaCrafting(PrepareItemCraftEvent e) {
-        boolean hasCustom = false;
-        boolean hasVanilla = false;
-        boolean hasBoots = false;
-        int customItemsInCraft = 0;
-        for (ItemStack item : e.getInventory().getMatrix()) {
-            if (item != null) {
-                ItemStack single = item.clone();
-                single.setAmount(1);
-                if (ArrayUtils.contains(ItemManager.allItems, single)) {
-                    customItemsInCraft++;
-                }
-                if (single.equals(ItemManager.venBoots)) {
-                    hasBoots = true;
-                }
-            }
-        }
-        if (customItemsInCraft == 1 || hasBoots) {
-            e.getInventory().setResult(null);
-        }
-        for (ItemStack item : e.getInventory().getMatrix()) {
-            if (item != null) {
-                if (ArrayUtils.contains(ItemManager.allItems, item)) {
-                    hasCustom = true;
-                } else {
-                    if (!item.getType().equals(Material.GOLDEN_APPLE) && !item.getType().equals(Material.END_CRYSTAL)) {
-                        hasVanilla = true;
-                    }
-                }
-            }
-        }
-        if (hasCustom && hasVanilla) {
-            e.getInventory().setResult(null);
-        }
-    }
-
-
     @EventHandler
     public void stopBlockPlace(BlockPlaceEvent e){
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.eternalFragment.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
+        ItemStack block = e.getPlayer().getInventory().getItemInMainHand();
+        if (block.getItemMeta() == null) {
+            return;
         }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.shatterSpine.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
+        if (!NBTEditor.contains(block, NBTEditor.CUSTOM_DATA, "VEN_BLOCK")) {
+            return;
         }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.lusciousApple.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
+        if (!NBTEditor.getBoolean(block, NBTEditor.CUSTOM_DATA, "VEN_BLOCK")) {
+            return;
         }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.theCatalyst.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ItemManager.oven.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.fusionChamber.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartA.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartB.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.plasmaTorch.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
+
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.eternalFragment.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.shatterSpine.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.lusciousApple.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.theCatalyst.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ItemManager.oven.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.fusionChamber.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartA.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartB.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.plasmaTorch.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
 
 
     }
@@ -965,16 +792,6 @@ public class Events implements Listener {
     }
 
     @EventHandler
-    public void stopWavePickup(EntityPickupItemEvent e){
-        if (plugin.venSpawned){
-            if (e.getItem().getItemStack().getType().equals(Material.ICE)){
-                e.getItem().remove();
-                e.setCancelled(true);
-            }
-        }
-    }
-
-    @EventHandler
     public void preventSheepDyeing(SheepDyeWoolEvent e) {
         Player player = e.getPlayer();
         ItemStack stack = e.getPlayer().getEquipment().getItemInMainHand().clone();
@@ -998,8 +815,10 @@ public class Events implements Listener {
 
 //    @EventHandler
 //    public void lootRollTest(PlayerInteractEvent e) {
-//        e.getPlayer().sendMessage("Loot Roll:");
-//        LootHandler loot = new LootHandler();
-//        loot.lootRoll(e.getPlayer(), 5);
+//        Bukkit.broadcastMessage("\n");
+//        String id = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_ID");
+//        Bukkit.broadcastMessage(id);
+//        String type = NBTEditor.getString(e.getItem(), NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE");
+//        Bukkit.broadcastMessage(type);
 //    }
 }

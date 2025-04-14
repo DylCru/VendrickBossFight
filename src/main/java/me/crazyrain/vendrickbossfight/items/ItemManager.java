@@ -1,11 +1,13 @@
-package me.crazyrain.vendrickbossfight.functionality;
+package me.crazyrain.vendrickbossfight.items;
 
+import io.github.bananapuncher714.nbteditor.NBTEditor;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.Lang;
+import me.crazyrain.vendrickbossfight.functionality.Rarity;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +17,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import java.util.*;
 import java.util.logging.Level;
-
 
 public class ItemManager {
 
@@ -89,10 +90,10 @@ public class ItemManager {
         createOven();
         createNutrimentU();
         createCatalyst();
-        flameCore = createCore(Lang.FLAMECORE.toString(), Lang.FLAMECORETAG.toString(), Material.ORANGE_DYE, Rarity.RARE.toString());
-        waveCore = createCore(Lang.WAVECORE.toString(), Lang.WAVECORETAG.toString(), Material.LIGHT_BLUE_DYE, Rarity.RARE.toString());
-        voltaicCore = createCore(Lang.VOLTAICCORE.toString(), Lang.VOLTAICCORETAG.toString(), Material.YELLOW_DYE, Rarity.EPIC.toString());
-        voidCore = createCore(Lang.VOIDCORE.toString(), ChatColor.DARK_GRAY + "It's " + ChatColor.MAGIC + "the end", Material.BLACK_DYE, Rarity.EPIC.toString());
+        flameCore = createCore(Lang.FLAMECORE.toString(), Lang.FLAMECORETAG.toString(), Material.ORANGE_DYE, Rarity.RARE.toString(), ItemID.VEN_FLAMECORE.getId());
+        waveCore = createCore(Lang.WAVECORE.toString(), Lang.WAVECORETAG.toString(), Material.LIGHT_BLUE_DYE, Rarity.RARE.toString(), ItemID.VEN_WAVECORE.getId());
+        voltaicCore = createCore(Lang.VOLTAICCORE.toString(), Lang.VOLTAICCORETAG.toString(), Material.YELLOW_DYE, Rarity.EPIC.toString(), ItemID.VEN_VOLTAICCORE.getId());
+        voidCore = createCore(Lang.VOIDCORE.toString(), ChatColor.DARK_GRAY + "It's " + ChatColor.MAGIC + "the end", Material.BLACK_DYE, Rarity.EPIC.toString(), ItemID.VEN_VOIDCORE.getId());
         createVolatile();
         createEarthStar();
         createBall();
@@ -141,6 +142,23 @@ public class ItemManager {
         return enchData;
     }
 
+    private static ItemStack setItemID(ItemStack item, String id) {
+        return NBTEditor.set(item, id, NBTEditor.CUSTOM_DATA, "VEN_ITEM_ID");
+    }
+
+    private static void addRecipeLore(List<String> lore) {
+        lore.add("\n");
+        lore.add(Lang.VIEWRECIPE.toString());
+    }
+
+    private static ItemStack setItemType(ItemStack item, String id) {
+        return NBTEditor.set(item, id, NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE");
+    }
+
+    private static ItemStack setAsVenBlock(ItemStack item) {
+        return NBTEditor.set(item, true, NBTEditor.CUSTOM_DATA, "VEN_BLOCK");
+    }
+
     private static void createStar(){
         ItemStack item = new ItemStack(Material.NETHER_STAR);
         ItemMeta meta = item.getItemMeta();
@@ -162,6 +180,9 @@ public class ItemManager {
         meta.setLore(lore);
 
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_ETERNALSTAR.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
+
         eternalStar = item;
 
         ShapedRecipe sr = new ShapedRecipe(NamespacedKey.minecraft("eternalstar"), item);
@@ -183,6 +204,9 @@ public class ItemManager {
         lore.add(Lang.VSTAR1.toString());
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_VOLATILESTAR.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
+
         volatileStar = item;
     }
 
@@ -208,10 +232,10 @@ public class ItemManager {
         lore.add(Lang.FLAMESTARDESC1.toString());
         lore.add(Lang.FLAMESTARDESC2.toString());
         lore.add(Lang.FLAMESTARDESC3.toString());
-
         meta.setLore(lore);
-
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_FLAMINGSTAR.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         flamingStar = item;
     }
 
@@ -237,11 +261,10 @@ public class ItemManager {
         lore.add(Lang.TIDESTARDESC1.toString());
         lore.add(Lang.TIDESTARDESC2.toString());
         lore.add(Lang.TIDESTARDESC3.toString());
-
-
         meta.setLore(lore);
-
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_TIDALSTAR.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         tidalStar = item;
     }
 
@@ -267,11 +290,10 @@ public class ItemManager {
         lore.add(Lang.STORMSTARDESC1.toString());
         lore.add(Lang.STORMSTARDESC2.toString());
         lore.add(Lang.STORMSTARDESC3.toString());
-
-
         meta.setLore(lore);
-
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_STORMSTAR.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         stormStar = item;
     }
 
@@ -299,8 +321,9 @@ public class ItemManager {
         lore.add(Lang.DARKSTARDESC3.toString());
 
         meta.setLore(lore);
-
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_DARKSTAR.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         darkStar = item;
     }
 
@@ -324,9 +347,13 @@ public class ItemManager {
          lore.add("");
          lore.add(Lang.HATCHET3.toString());
          lore.add(Lang.HATCHET4.toString());
+         addRecipeLore(lore);
          meta.setLore(lore);
 
          item.setItemMeta(meta);
+         item = setItemID(item, ItemID.VEN_VENDRICKHATCHET.getId());
+         item = setItemType(item, ItemType.MATERIAL.getItemType());
+
          vendrickHatchet = item;
     }
 
@@ -354,8 +381,12 @@ public class ItemManager {
          lore.add(Lang.FRAG1.toString());
          lore.add(Lang.FRAG2.toString());
          lore.add(Lang.FRAG3.toString());
+         addRecipeLore(lore);
          meta.setLore(lore);
          item.setItemMeta(meta);
+         item = setItemID(item, ItemID.VEN_ETERNALFRAGMENT.getId());
+         item = setItemType(item, ItemType.MATERIAL.getItemType());
+         item = setAsVenBlock(item);
          eternalFragment = item;
     }
 
@@ -374,9 +405,12 @@ public class ItemManager {
          lore.add("");
          lore.add(Lang.ESSENCE4.toString());
          lore.add(Lang.ESSENCE5.toString());
+         addRecipeLore(lore);
 
          meta.setLore(lore);
          item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_ESSENCEOFETERNITY.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
          essenceOfEternity = item;
     }
 
@@ -402,6 +436,8 @@ public class ItemManager {
         meta.setLore(lore);
 
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_TRUEETERNALHATCHET.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         trueEternalHatchet = item;
     }
 
@@ -420,8 +456,13 @@ public class ItemManager {
          lore.add("");
          lore.add(Lang.SPINE2.toString());
          lore.add(Lang.SPINE3.toString());
+         addRecipeLore(lore);
          meta.setLore(lore);
          item.setItemMeta(meta);
+
+        item = setItemID(item, ItemID.VEN_SHATTERSPINE.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
          shatterSpine = item;
 
     }
@@ -443,6 +484,8 @@ public class ItemManager {
         lore.add(Lang.STICK2.toString());
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_SHATTERSTICK.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
 
         shatterStick = item;
     }
@@ -461,9 +504,11 @@ public class ItemManager {
          lore.add("");
          lore.add(Lang.NUTRIMENT1.toString());
          lore.add(Lang.NUTRIMENT2.toString());
+         addRecipeLore(lore);
          meta.setLore(lore);
          item.setItemMeta(meta);
-
+        item = setItemID(item, ItemID.VEN_NUTRIMENTOFTHEINFINITE.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
          nutrimentOfTheInfinite = item;
     }
 
@@ -514,6 +559,8 @@ public class ItemManager {
 
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_PIECRUST.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         pieCrust = item;
     }
 
@@ -533,8 +580,12 @@ public class ItemManager {
         lore.add(Lang.APPLE2.toString());
         lore.add(ChatColor.DARK_GRAY + "");
         lore.add(Lang.APPLE3.toString());
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_LUSCIOUSAPPLE.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
 
         lusciousApple = item;
     }
@@ -555,6 +606,9 @@ public class ItemManager {
         lore.add(Lang.OVEN2.toString());
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_OVEN.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
+        item = setAsVenBlock(item);
         oven = item;
     }
 
@@ -573,6 +627,8 @@ public class ItemManager {
         lore.add(Lang.UNUTRIMENT1.toString());
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_NUTRIMENTU.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
 
         nutrimentU = item;
     }
@@ -588,13 +644,17 @@ public class ItemManager {
         lore.add("");
         lore.add(Lang.CATALYST1.toString());
         lore.add(Lang.CATALYST2.toString());
+        addRecipeLore(lore);
 
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_THECATALYST.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
         theCatalyst = item;
     }
 
-    private static ItemStack createCore(String name, String tagLine, Material mat, String rarity){
+    private static ItemStack createCore(String name, String tagLine, Material mat, String rarity, String id){
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
 
@@ -603,8 +663,11 @@ public class ItemManager {
         lore.add(rarity);
         lore.add("");
         lore.add(ChatColor.DARK_GRAY + tagLine);
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, id);
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
 
         return item;
     }
@@ -642,6 +705,8 @@ public class ItemManager {
         lore.add(Lang.ENERGY3.toString().replace("!c", String.valueOf(cost / 2)));
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_ENERGYRIFLE.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
 
         energyRifle = item;
     }
@@ -657,8 +722,12 @@ public class ItemManager {
         lore.add(Lang.CHAMBER2.toString());
         lore.add("");
         lore.add(Lang.CHAMBER3.toString());
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_FUSIONCHAMBER.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
 
         fusionChamber = item;
     }
@@ -673,6 +742,9 @@ public class ItemManager {
         lore.add(Lang.WEDGE1.toString());
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.valueOf("VEN_CATALYSTPART" + part.toUpperCase()).getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
+        item = setAsVenBlock(item);
         return item;
     }
 
@@ -682,6 +754,8 @@ public class ItemManager {
         meta.setDisplayName(Lang.UNCHARGEDNAME.toString());
         meta.setLore(Collections.singletonList(Rarity.EPIC.toString()));
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_UNCHARGEDRIFLE.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
         unchargedRifle = item;
     }
 
@@ -694,8 +768,11 @@ public class ItemManager {
         lore.add("");
         lore.add(Lang.INFINIUM1.toString());
         lore.add(Lang.INFINIUM2.toString());
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_INFINIUM.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
         infinium = item;
     }
 
@@ -709,8 +786,11 @@ public class ItemManager {
         lore.add(Rarity.EPIC.toString());
         lore.add("");
         lore.add(Lang.ENCHINFDESC.toString());
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_ENCHANTEDINFINIUM.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
         enchantedInfinium = item;
     }
 
@@ -724,8 +804,12 @@ public class ItemManager {
         lore.add(Rarity.EPIC.toString());
         lore.add("");
         lore.add(Lang.PLASTORCHDESC.toString());
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_PLASMATORCH.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
         plasmaTorch = item;
     }
 
@@ -755,6 +839,8 @@ public class ItemManager {
         hLore.add(Lang.HELMDESC.toString());
         meta.setLore(hLore);
         helm.setItemMeta(meta);
+        helm = setItemID(helm, ItemID.VEN_VENHEAD.getId());
+        helm = setItemType(helm, ItemType.ITEM.getItemType());
         venHead = helm;
     }
     private static void createVenChest(){
@@ -781,6 +867,8 @@ public class ItemManager {
         cLore.add(Lang.CHESTDESC.toString());
         cMeta.setLore(cLore);
         chest.setItemMeta(cMeta);
+        chest = setItemID(chest, ItemID.VEN_VENCHEST.getId());
+        chest = setItemType(chest, ItemType.ITEM.getItemType());
         venChest = chest;
     }
     private static void createVenLegs(){
@@ -813,6 +901,8 @@ public class ItemManager {
         lLore.add(Lang.LEGSDESC.toString());
         lMeta.setLore(lLore);
         legs.setItemMeta(lMeta);
+        legs = setItemID(legs, ItemID.VEN_VENLEGS.getId());
+        legs = setItemType(legs, ItemType.ITEM.getItemType());
         venLegs = legs;
     }
     private static void createVenBoots(){
@@ -832,6 +922,8 @@ public class ItemManager {
         bLore.add(Lang.BOOTSDESC.toString());
         bMeta.setLore(bLore);
         boots.setItemMeta(bMeta);
+        boots = setItemID(boots, ItemID.VEN_VENBOOTS.getId());
+        boots = setItemType(boots, ItemType.ITEM.getItemType());
         venBoots = boots;
     }
 
@@ -847,6 +939,9 @@ public class ItemManager {
         lore.add(Lang.TALISABIL.toString());
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_VENDRICKTALISMAN.getId());
+        item = setItemType(item, ItemType.ITEM.getItemType());
+        item = setAsVenBlock(item);
         vendrickTalisman = item;
     }
 
@@ -858,8 +953,11 @@ public class ItemManager {
         lore.add(Rarity.RARE.toString());
         lore.add("");
         lore.add(Lang.VOIDFRAGDESC.toString());
+        addRecipeLore(lore);
         meta.setLore(lore);
         item.setItemMeta(meta);
+        item = setItemID(item, ItemID.VEN_VOIDCOREFRAGMENT.getId());
+        item = setItemType(item, ItemType.MATERIAL.getItemType());
         voidCoreFragment = item;
     }
 }

@@ -1,5 +1,7 @@
 package me.crazyrain.vendrickbossfight;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import me.crazyrain.vendrickbossfight.Commands.Commands;
 import me.crazyrain.vendrickbossfight.Commands.FightCommands;
 import me.crazyrain.vendrickbossfight.attacks.*;
@@ -18,16 +20,19 @@ import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
 import me.crazyrain.vendrickbossfight.distortions.tidal.TideEvents;
 import me.crazyrain.vendrickbossfight.functionality.*;
 import me.crazyrain.vendrickbossfight.inventories.ClickEvents;
+import me.crazyrain.vendrickbossfight.inventories.RecipeInvEvents;
+import me.crazyrain.vendrickbossfight.items.CraftHandler;
+import me.crazyrain.vendrickbossfight.items.CraftManager;
+import me.crazyrain.vendrickbossfight.items.DefaultRecipes;
+import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.npcs.Vendrick;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+
+import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +62,7 @@ public final class VendrickBossFight extends JavaPlugin {
 
     public static VendrickBossFight plugin;
     public LootHandler lootHandler;
+    private CraftManager craftManager;
 
     @Override
     public void onEnable() {
@@ -70,6 +76,8 @@ public final class VendrickBossFight extends JavaPlugin {
         initLocations();
         ItemGlow.initTeams();
         lootHandler = new LootHandler();
+
+        craftManager = new CraftManager(getRecipeFile(), plugin.getLogger());
 
         getServer().getPluginManager().registerEvents(new Events(this),this);
         getServer().getPluginManager().registerEvents(new ZombieHoard(this), this);
@@ -92,6 +100,8 @@ public final class VendrickBossFight extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TideSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new StormSpiritEvents(this), this);
         getServer().getPluginManager().registerEvents(new VenArmourEvents(this), this);
+        getServer().getPluginManager().registerEvents(new CraftHandler(this), this);
+        getServer().getPluginManager().registerEvents(new RecipeInvEvents(this), this);
 
         getCommand("ven").setExecutor(new Commands(this));
         getCommand("venfight").setExecutor(new FightCommands(this));
@@ -132,6 +142,13 @@ public final class VendrickBossFight extends JavaPlugin {
                 ((DarkVendrick) vendrick).getSpirit().removeSpirit();
             } catch (Exception ignored) {}
         }
+    }
+
+    public void reloadPluginConfig() {
+        reloadConfig();
+        initLocations();
+        getCraftManager().reloadRecipes(getRecipeFile());
+        lootHandler.refreshChances();
     }
 
     public void initLocations(){
@@ -183,7 +200,7 @@ public final class VendrickBossFight extends JavaPlugin {
             conf.save(getLangFile());
         } catch(IOException e) {
             log.log(Level.WARNING, "Vendrick: Failed to save lang.yml.");
-            log.log(Level.WARNING, "Vendrick: Report this stack trace to CrazyRain.");
+            log.log(Level.WARNING, "Vendrick: Report this stack trace to RainStxrm.");
             e.printStackTrace();
         }
         return conf;
@@ -204,4 +221,41 @@ public final class VendrickBossFight extends JavaPlugin {
     public File getLangFile() {
         return LANG_FILE;
     }
+
+    private FileInputStream getRecipeFile()  {
+        File file = new File(getDataFolder(), "recipes.json");
+        if (!file.exists()) {
+            Map<String, Map<String, String[]>> recipeData = new HashMap<>();
+            getLogger().log(Level.INFO, "recipes.json doesn't exist, creating one.");
+            try {
+                getDataFolder().mkdir();
+                file.createNewFile();
+                recipeData.put("recipes", DefaultRecipes.getDefaultRecipes());
+                saveDefaultRecipes(recipeData, file);
+            } catch (IOException e) {
+                getLogger().log(Level.SEVERE, "Unable to create recipes.json!");
+                return null;
+            }
+        }
+
+        try {
+            return new FileInputStream(new File(getDataFolder(), "recipes.json"));
+        } catch (FileNotFoundException e) {
+            log.severe("Couldn't load recipe file.");
+            log.severe("This is a fatal error. Now disabling");
+        }
+        return null;
+    }
+
+    public void saveDefaultRecipes(Map<String, Map<String, String[]>> recipeData, File file) throws IOException {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Writer writer = new FileWriter(file);
+        gson.toJson(recipeData, writer);
+        writer.close();
+    }
+
+    public CraftManager getCraftManager() {
+        return this.craftManager;
+    }
+
 }
