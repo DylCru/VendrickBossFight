@@ -716,33 +716,45 @@ public class Events implements Listener {
 
     @EventHandler
     public void stopBlockPlace(BlockPlaceEvent e){
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.eternalFragment.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
+        ItemStack block = e.getPlayer().getInventory().getItemInMainHand();
+        if (block.getItemMeta() == null) {
+            return;
         }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.shatterSpine.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
+        if (!NBTEditor.contains(block, NBTEditor.CUSTOM_DATA, "VEN_BLOCK")) {
+            return;
         }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.lusciousApple.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
+        if (!NBTEditor.getBoolean(block, NBTEditor.CUSTOM_DATA, "VEN_BLOCK")) {
+            return;
         }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.theCatalyst.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ItemManager.oven.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.fusionChamber.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartA.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartB.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
-        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.plasmaTorch.getItemMeta().getDisplayName())){
-            e.setCancelled(true);
-        }
+        e.setCancelled(true);
+
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.eternalFragment.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.shatterSpine.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.lusciousApple.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.theCatalyst.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(ItemManager.oven.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.fusionChamber.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartA.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.catalystPartB.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
+//        if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.plasmaTorch.getItemMeta().getDisplayName())){
+//            e.setCancelled(true);
+//        }
 
 
     }
@@ -776,16 +788,6 @@ public class Events implements Listener {
 
         if (e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName().equalsIgnoreCase(ItemManager.volatileStar.getItemMeta().getDisplayName())){
             e.setCancelled(true);
-        }
-    }
-
-    @EventHandler
-    public void stopWavePickup(EntityPickupItemEvent e){
-        if (plugin.venSpawned){
-            if (e.getItem().getItemStack().getType().equals(Material.ICE)){
-                e.getItem().remove();
-                e.setCancelled(true);
-            }
         }
     }
 

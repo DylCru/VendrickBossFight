@@ -155,6 +155,10 @@ public class ItemManager {
         return NBTEditor.set(item, id, NBTEditor.CUSTOM_DATA, "VEN_ITEM_TYPE");
     }
 
+    private static ItemStack setAsVenBlock(ItemStack item) {
+        return NBTEditor.set(item, true, NBTEditor.CUSTOM_DATA, "VEN_BLOCK");
+    }
+
     private static void createStar(){
         ItemStack item = new ItemStack(Material.NETHER_STAR);
         ItemMeta meta = item.getItemMeta();
@@ -382,6 +386,7 @@ public class ItemManager {
          item.setItemMeta(meta);
          item = setItemID(item, ItemID.VEN_ETERNALFRAGMENT.getId());
          item = setItemType(item, ItemType.MATERIAL.getItemType());
+         item = setAsVenBlock(item);
          eternalFragment = item;
     }
 
@@ -457,6 +462,7 @@ public class ItemManager {
 
         item = setItemID(item, ItemID.VEN_SHATTERSPINE.getId());
         item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
          shatterSpine = item;
 
     }
@@ -579,6 +585,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.VEN_LUSCIOUSAPPLE.getId());
         item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
 
         lusciousApple = item;
     }
@@ -601,6 +608,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.VEN_OVEN.getId());
         item = setItemType(item, ItemType.ITEM.getItemType());
+        item = setAsVenBlock(item);
         oven = item;
     }
 
@@ -642,6 +650,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.VEN_THECATALYST.getId());
         item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
         theCatalyst = item;
     }
 
@@ -718,6 +727,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.VEN_FUSIONCHAMBER.getId());
         item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
 
         fusionChamber = item;
     }
@@ -734,6 +744,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.valueOf("VEN_CATALYSTPART" + part.toUpperCase()).getId());
         item = setItemType(item, ItemType.ITEM.getItemType());
+        item = setAsVenBlock(item);
         return item;
     }
 
@@ -798,6 +809,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.VEN_PLASMATORCH.getId());
         item = setItemType(item, ItemType.MATERIAL.getItemType());
+        item = setAsVenBlock(item);
         plasmaTorch = item;
     }
 
@@ -915,7 +927,6 @@ public class ItemManager {
         venBoots = boots;
     }
 
-    //TODO talisman can be placed on ground, will be fixed with VEN_BLOCK set to true
     private static void createTalisman(){
         ItemStack item = new ItemStack(Material.CONDUIT);
         ItemMeta meta = item.getItemMeta();
@@ -930,6 +941,7 @@ public class ItemManager {
         item.setItemMeta(meta);
         item = setItemID(item, ItemID.VEN_VENDRICKTALISMAN.getId());
         item = setItemType(item, ItemType.ITEM.getItemType());
+        item = setAsVenBlock(item);
         vendrickTalisman = item;
     }
 
