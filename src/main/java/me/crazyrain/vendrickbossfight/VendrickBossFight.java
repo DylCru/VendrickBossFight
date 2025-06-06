@@ -69,7 +69,7 @@ public final class VendrickBossFight extends JavaPlugin {
         plugin = this;
         this.saveDefaultConfig();
         log = VendrickBossFight.getPlugin(VendrickBossFight.class).getLogger();
-        log.log(Level.INFO, "Plugin is online." + Color.RED + " Vendrick awaits.");
+        log.log(Level.INFO, "Plugin is online. Vendrick awaits.");
 
         LANG = loadLang();
         ItemManager.Init();
