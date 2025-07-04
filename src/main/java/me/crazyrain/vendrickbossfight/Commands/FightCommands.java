@@ -2,19 +2,18 @@ package me.crazyrain.vendrickbossfight.Commands;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSkipSpiritEvent;
-import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.attacks.PigBombs;
 import me.crazyrain.vendrickbossfight.attacks.PortalWraiths;
-import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
-import me.crazyrain.vendrickbossfight.distortions.flaming.FlamingVendrick;
-import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
-import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
-import me.crazyrain.vendrickbossfight.distortions.stormy.StormyVendrick;
+import me.crazyrain.vendrickbossfight.vendrick.dark.DarkVendrick;
+import me.crazyrain.vendrickbossfight.vendrick.flaming.FlamingVendrick;
+import me.crazyrain.vendrickbossfight.vendrick.stormy.Hurricane;
+import me.crazyrain.vendrickbossfight.vendrick.tidal.TidalVendrick;
+import me.crazyrain.vendrickbossfight.vendrick.stormy.StormyVendrick;
 import me.crazyrain.vendrickbossfight.functionality.Bar;
 import me.crazyrain.vendrickbossfight.functionality.Events;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
+import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.command.Command;
@@ -88,12 +87,12 @@ public class FightCommands implements CommandExecutor {
 
                 }
                 else if (args[0].equalsIgnoreCase("skip") || args[0].equalsIgnoreCase("sk")){
-                    if (plugin.venSpawned){
-                        if (!plugin.vendrick.getSkipable()){
+                    if (plugin.getFightManager().isVenSpawned()){
+                        if (!plugin.getFightManager().getVendrick().getSkipable()){
                             player.sendMessage(venPrefix + ChatColor.RED + " Wait for the attack to be ready before skipping!");
                             return true;
                         }
-                        switch (plugin.vendrick.getPhase()){
+                        switch (plugin.getFightManager().getVendrick().getPhase()){
                             case 0:
                                 player.sendMessage(venPrefix + ChatColor.RED + " Vendrick isn't attacking currently.");
                                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0f, 1.0f);
@@ -107,26 +106,26 @@ public class FightCommands implements CommandExecutor {
                                 bombs.skipAttack();
                                 break;
                             case 3:
-                                for (Entity e : plugin.vendrick.getVendrick().getNearbyEntities(30,30,30)){
+                                for (Entity e : plugin.getFightManager().getVendrick().getEntity().getNearbyEntities(30,30,30)){
                                     if (e.hasMetadata("Growth")){
                                         e.getWorld().spawnParticle(Particle.SPELL_WITCH, e.getLocation(), 3);
                                         e.remove();
                                     }
                                 }
-                                plugin.vendrick.stopAttack();
+                                plugin.getFightManager().getVendrick().stopAttack();
                                 break;
                             case 5:
-                                ((TidalVendrick) plugin.vendrick).getBubbleBomb().stopAttack();
-                                plugin.vendrick.stopAttack();
+                                ((TidalVendrick) plugin.getFightManager().getVendrick()).getBubbleBomb().stopAttack();
+                                plugin.getFightManager().getVendrick().stopAttack();
                                 break;
                             case 6:
-                                DarkVendrick vendrick = (DarkVendrick) plugin.vendrick;
+                                DarkVendrick vendrick = (DarkVendrick) plugin.getFightManager().getVendrick();
                                 Bukkit.getPluginManager().callEvent(new VendrickSkipSpiritEvent(vendrick.getSpirit().getMetadata()));
-                                plugin.vendrick.stopAttack();
-                                plugin.runeHandler.setPaused(false);
+                                plugin.getFightManager().getVendrick().stopAttack();
+                                plugin.getFightManager().getRuneHandler().setPaused(false);
                                 break;
                             }
-                        for (UUID id : plugin.fighting){
+                        for (UUID id : plugin.getFightManager().getFighting()){
                             Bukkit.getPlayer(id).sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + player.getDisplayName() + ChatColor.GREEN + " Skipped Vendrick's attack!");
                         }
                         player.sendMessage(ChatColor.GREEN + "Attack skipped!");
@@ -136,31 +135,31 @@ public class FightCommands implements CommandExecutor {
                     }
                 }
                 else if (args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("st")){
-                    if (plugin.venSpawned){
-                        if (plugin.vendrick.getDistortion().equalsIgnoreCase("dark")) {
-                            if (((DarkVendrick) plugin.vendrick).isDead()) {
+                    if (plugin.getFightManager().isVenSpawned()){
+                        if (plugin.getFightManager().getVendrick().getDistortion().equalsIgnoreCase("dark")) {
+                            if (((DarkVendrick) plugin.getFightManager().getVendrick()).isDead()) {
                                 player.sendMessage(venPrefix + ChatColor.RED + " You cannot end the fight now, wait for the cutscene to end.");
                                 return true;
                             }
                         }
-                        if (plugin.vendrick.getPhase() == 0){
+                        if (plugin.getFightManager().getVendrick().getPhase() == 0){
                             for (Bar bar : plugin.bars){
                                 bar.remove();
                             }
-                            for (UUID id : plugin.fighting){
+                            for (UUID id : plugin.getFightManager().getFighting()){
                                 Bukkit.getPlayer(id).sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + player.getDisplayName() + ChatColor.RED + " Stopped the fight!");
                             }
-                            plugin.vendrick.getVendrick().getWorld().spawnParticle(Particle.SPELL_WITCH, plugin.vendrick.getVendrick().getLocation(), 10);
-                            plugin.vendrick.getVendrick().remove();
-                            plugin.fighting.clear();
-                            plugin.pInv.clear();
-                            Bukkit.getPluginManager().callEvent(new VendrickFightStopEvent(null, null, null, plugin.vendrick.getDistortion(), plugin.vendrick.getDifficulty()));
-                            plugin.venSpawned = false;
+                            plugin.getFightManager().getVendrick().getEntity().getWorld().spawnParticle(Particle.SPELL_WITCH, plugin.getFightManager().getVendrick().getEntity().getLocation(), 10);
+                            plugin.getFightManager().getVendrick().getEntity().remove();
+                            plugin.getFightManager().getFighting().clear();
+                            plugin.getFightManager().getpInv().clear();
+                            Bukkit.getPluginManager().callEvent(new VendrickFightStopEvent(null, null, null, plugin.getFightManager().getVendrick().getDistortion(), plugin.getFightManager().getVendrick().getDifficulty()));
+                            plugin.getFightManager().setVenSpawned(false);
 
                             try {
-                                plugin.runeHandler.clearStand();
-                                plugin.runeHandler.setActive(false);
-                                plugin.countdown.removeBars();
+                                plugin.getFightManager().getRuneHandler().clearStand();
+                                plugin.getFightManager().getRuneHandler().setActive(false);
+                                plugin.getFightManager().getCountdown().removeBars();
                             } catch (Exception ignored) {}
 
                         } else {
@@ -173,7 +172,7 @@ public class FightCommands implements CommandExecutor {
                 }
                 else if (args[0].equalsIgnoreCase("spawn") || args[0].equalsIgnoreCase("sp")){
                     if (args.length == 3){ //Using custom location from config
-                        if (plugin.venSpawned){
+                        if (plugin.getFightManager().isVenSpawned()){
                             player.sendMessage(venPrefix + ChatColor.RED + " Vendrick is already spawned!");
                             return true;
                         }
@@ -205,29 +204,29 @@ public class FightCommands implements CommandExecutor {
                                 for (Entity e : spawnLoc.getWorld().getNearbyEntities(spawnLoc,5.5,6,5.5)){
                                     if (e instanceof Player){
                                         pCount++;
-                                        plugin.fighting.add(e.getUniqueId());
+                                        plugin.getFightManager().getFighting().add(e.getUniqueId());
                                     }
                                 }
                                 if (pCount > 0){
                                     switch (args[2]){
                                         case "f":
-                                            plugin.vendrick = new FlamingVendrick(plugin.fighting, spawnLoc, plugin);
+                                            plugin.getFightManager().setVendrick(new FlamingVendrick(plugin.getFightManager().getFighting(), spawnLoc, plugin));
                                             break;
                                         case "t":
-                                            plugin.vendrick = new TidalVendrick(plugin.fighting, spawnLoc, plugin);
-                                            plugin.squids = 4;
+                                            plugin.getFightManager().setVendrick(new TidalVendrick(plugin.getFightManager().getFighting(), spawnLoc, plugin));
                                             break;
                                         case "s":
-                                            plugin.vendrick = new StormyVendrick(plugin.fighting, spawnLoc, plugin);
+                                            plugin.getFightManager().setVendrick(new StormyVendrick(plugin.getFightManager().getFighting(), spawnLoc, plugin));
                                             break;
                                         case "d":
-                                            plugin.vendrick = new DarkVendrick(plugin.fighting, spawnLoc, plugin);
+                                            plugin.getFightManager().setVendrick(new DarkVendrick(plugin.getFightManager().getFighting(), spawnLoc, plugin));
+
                                             break;
                                         case "n":
-                                            plugin.vendrick = new Vendrick(plugin.fighting, spawnLoc, plugin);
+                                            plugin.getFightManager().setVendrick(new Vendrick(plugin.getFightManager().getFighting(), spawnLoc, plugin));
                                     }
 
-                                    for (UUID player : plugin.fighting){
+                                    for (UUID player : plugin.getFightManager().getFighting()){
                                         assert Bukkit.getPlayer(player) != null;
                                         Bukkit.getPlayer(player).sendTitle(ChatColor.DARK_RED + "Vendrick", ChatColor.RED + "The eternal guardian", 10, 70, 20);
                                         Bukkit.getPlayer(player).sendMessage(Lang.CURSE.toString());
@@ -240,14 +239,13 @@ public class FightCommands implements CommandExecutor {
 
                                     }
 
-                                    plugin.vendrick.spawnBoss();
+                                    plugin.getFightManager().getVendrick().spawnBoss();
 
                                     if (args[2].equalsIgnoreCase("s")){
-                                        Hurricane hurricane = new Hurricane(plugin.vendrick);
-                                        plugin.hurricane = hurricane;
+                                        plugin.getFightManager().setHurricane(new Hurricane(plugin.getFightManager().getVendrick()));
                                     }
 
-                                    plugin.venSpawned = true;
+                                    plugin.getFightManager().setVenSpawned(true);
                                 } else {
                                     player.sendMessage(venPrefix + ChatColor.RED + " No players could be found! Fight aborted.");
                                     cancel();
@@ -261,8 +259,8 @@ public class FightCommands implements CommandExecutor {
                 }
                 else if (args[0].equalsIgnoreCase("storm")){
                     if (args.length == 3){
-                        if (plugin.venSpawned){
-                            if (plugin.vendrick.getDifficulty() == 4){
+                        if (plugin.getFightManager().isVenSpawned()){
+                            if (plugin.getFightManager().getVendrick().getDifficulty() == 4){
                                 int input;
                                 try {
                                     input = Integer.parseInt(args[2]);
@@ -272,12 +270,12 @@ public class FightCommands implements CommandExecutor {
                                 }
                                 switch (args[1]){
                                     case "damage":
-                                        plugin.hurricane.setDamage(input);
-                                        player.sendMessage(venPrefix + ChatColor.GREEN + " Done! Storm damage set to " + plugin.hurricane.getDamage());
+                                        plugin.getFightManager().getHurricane().setDamage(input);
+                                        player.sendMessage(venPrefix + ChatColor.GREEN + " Done! Storm damage set to " + plugin.getFightManager().getHurricane().getDamage());
                                         break;
                                     case "size":
-                                        plugin.hurricane.setRadius(input);
-                                        player.sendMessage(venPrefix + ChatColor.GREEN + " Done! Storm size set to " + plugin.hurricane.getRadius());
+                                        plugin.getFightManager().getHurricane().setRadius(input);
+                                        player.sendMessage(venPrefix + ChatColor.GREEN + " Done! Storm size set to " + plugin.getFightManager().getHurricane().getRadius());
                                         break;
                                     default:
                                         player.sendMessage(venPrefix + ChatColor.RED + " /venfight storm [damage/size] [amount]");

@@ -110,7 +110,7 @@ public class PigBomb {
     public void explode(){
         pigBomb.getWorld().spawnParticle(Particle.EXPLOSION_LARGE, pigBomb.getLocation(), 2);
         pigBomb.setHealth(0);
-        for (UUID id : plugin.fighting){
+        for (UUID id : plugin.getFightManager().getFighting()){
             Player player = Bukkit.getPlayer(id);
             player.damage(5);
             player.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "BOOM! " + ChatColor.RED + "A pig bomb exploded!");

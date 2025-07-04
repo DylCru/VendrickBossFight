@@ -5,19 +5,22 @@ import com.google.gson.GsonBuilder;
 import me.crazyrain.vendrickbossfight.Commands.Commands;
 import me.crazyrain.vendrickbossfight.Commands.FightCommands;
 import me.crazyrain.vendrickbossfight.attacks.*;
-import me.crazyrain.vendrickbossfight.distortions.dark.DarkEvents;
-import me.crazyrain.vendrickbossfight.distortions.dark.DarkRuneHandler;
-import me.crazyrain.vendrickbossfight.distortions.dark.DarkVendrick;
-import me.crazyrain.vendrickbossfight.distortions.dark.VendrickTNT;
-import me.crazyrain.vendrickbossfight.distortions.dark.spirits.FlameSpiritEvents;
-import me.crazyrain.vendrickbossfight.distortions.dark.spirits.StormSpiritEvents;
-import me.crazyrain.vendrickbossfight.distortions.dark.spirits.TideSpiritEvents;
-import me.crazyrain.vendrickbossfight.distortions.dark.spirits.TsunamiCountdown;
-import me.crazyrain.vendrickbossfight.distortions.flaming.FlameEvents;
-import me.crazyrain.vendrickbossfight.distortions.stormy.Hurricane;
-import me.crazyrain.vendrickbossfight.distortions.stormy.StormyEvents;
-import me.crazyrain.vendrickbossfight.distortions.tidal.TidalVendrick;
-import me.crazyrain.vendrickbossfight.distortions.tidal.TideEvents;
+import me.crazyrain.vendrickbossfight.functionality.merchant.DMerchantFunc;
+import me.crazyrain.vendrickbossfight.functionality.merchant.MaterialMerchFunc;
+import me.crazyrain.vendrickbossfight.functionality.merchant.MerchantFunc;
+import me.crazyrain.vendrickbossfight.vendrick.dark.DarkEvents;
+import me.crazyrain.vendrickbossfight.vendrick.dark.DarkRuneHandler;
+import me.crazyrain.vendrickbossfight.vendrick.dark.DarkVendrick;
+import me.crazyrain.vendrickbossfight.vendrick.dark.VendrickTNT;
+import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.FlameSpiritEvents;
+import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.StormSpiritEvents;
+import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.TideSpiritEvents;
+import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.TsunamiCountdown;
+import me.crazyrain.vendrickbossfight.vendrick.flaming.FlameEvents;
+import me.crazyrain.vendrickbossfight.vendrick.stormy.Hurricane;
+import me.crazyrain.vendrickbossfight.vendrick.stormy.StormyEvents;
+import me.crazyrain.vendrickbossfight.vendrick.tidal.TidalVendrick;
+import me.crazyrain.vendrickbossfight.vendrick.tidal.TideEvents;
 import me.crazyrain.vendrickbossfight.functionality.*;
 import me.crazyrain.vendrickbossfight.inventories.ClickEvents;
 import me.crazyrain.vendrickbossfight.inventories.RecipeInvEvents;
@@ -25,8 +28,7 @@ import me.crazyrain.vendrickbossfight.items.CraftHandler;
 import me.crazyrain.vendrickbossfight.items.CraftManager;
 import me.crazyrain.vendrickbossfight.items.DefaultRecipes;
 import me.crazyrain.vendrickbossfight.items.ItemManager;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
-import org.bukkit.Color;
+import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -39,30 +41,18 @@ import java.util.logging.Logger;
 
 public final class VendrickBossFight extends JavaPlugin {
 
-    public boolean venSpawned = false;
-    public List<UUID> fighting = new ArrayList<>();
-    public List<Bar> bars = new ArrayList<>();
-
-    public HashMap<UUID, ItemStack[]> pInv = new HashMap<>();
-
     public static YamlConfiguration LANG;
     public static File LANG_FILE;
-
-    public int squids = 4;
-
-    public Vendrick vendrick;
-    public Hurricane hurricane;
-
-    public DarkRuneHandler runeHandler;
-    public TsunamiCountdown countdown;
-
+    public List<Bar> bars = new ArrayList<>();
     public List<Location> configSpawnLocs = new ArrayList<>();
 
     Logger log;
 
     public static VendrickBossFight plugin;
+
+    FightManager fightManager = new FightManager();
     public LootHandler lootHandler;
-    private CraftManager craftManager;
+    CraftManager craftManager;
 
     @Override
     public void onEnable() {
@@ -102,6 +92,7 @@ public final class VendrickBossFight extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new VenArmourEvents(this), this);
         getServer().getPluginManager().registerEvents(new CraftHandler(this), this);
         getServer().getPluginManager().registerEvents(new RecipeInvEvents(this), this);
+        getServer().getPluginManager().registerEvents(new BossHealthEvents(this), this);
 
         getCommand("ven").setExecutor(new Commands(this));
         getCommand("venfight").setExecutor(new FightCommands(this));
@@ -120,28 +111,7 @@ public final class VendrickBossFight extends JavaPlugin {
     @Override
     public void onDisable(){
         ItemGlow.removeTeams();
-
-        for (Bar bar : bars){
-            bar.remove();
-        }
-        if (venSpawned){
-            vendrick.getVendrick().remove();
-            try {
-                runeHandler.clearStand();
-            } catch (Exception ignored) {}
-            try {
-                hurricane.removeBar();
-            } catch (Exception ignored) {}
-            try {
-                countdown.removeBars();
-            } catch (Exception ignored) {}
-            try {
-                ((TidalVendrick) vendrick).removeSheilds();
-            } catch (Exception ignored) {}
-            try {
-                ((DarkVendrick) vendrick).getSpirit().removeSpirit();
-            } catch (Exception ignored) {}
-        }
+        fightManager.clearDown();
     }
 
     public void reloadPluginConfig() {
@@ -256,6 +226,14 @@ public final class VendrickBossFight extends JavaPlugin {
 
     public CraftManager getCraftManager() {
         return this.craftManager;
+    }
+
+    public FightManager getFightManager() {
+        return fightManager;
+    }
+
+    public void setFightManager(FightManager fightManager) {
+        this.fightManager = fightManager;
     }
 
 }

@@ -2,7 +2,7 @@ package me.crazyrain.vendrickbossfight.attacks;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.mobs.Growth;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
+import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -31,20 +31,20 @@ public class ZombieHoard implements Listener {
     }
 
     public void startAttack(){
-        Location loc = new Location(vendrick.getVendrick().getWorld(), vendrick.getVendrick().getLocation().getBlockX(), vendrick.getVendrick().getLocation().getBlockY() + 4, vendrick.getVendrick().getLocation().getBlockZ());
-        for (UUID id : plugin.fighting){
+        Location loc = new Location(vendrick.getEntity().getWorld(), vendrick.getEntity().getLocation().getBlockX(), vendrick.getEntity().getLocation().getBlockY() + 4, vendrick.getEntity().getLocation().getBlockZ());
+        for (UUID id : plugin.getFightManager().getFighting()){
             Bukkit.getPlayer(id).sendMessage(ChatColor.RED + "Vendrick is using the power of " + ChatColor.DARK_GREEN  + "" + ChatColor.BOLD + "THE HORDE" + ChatColor.RED + " to protect himself!");
         }
 
         zombieAmount = 6;
         spawned = 0;
 
-        spawnZombies(vendrick.getVendrick().getLocation());
+        spawnZombies(vendrick.getEntity().getLocation());
     }
 
 
     public void spawnZombies(Location loc){
-        LivingEntity venMob = vendrick.getVendrick();
+        LivingEntity venMob = vendrick.getEntity();
         for (int i = 0; i < 6; i++){
             int x = 0, z= 0;
             if (i % 2 == 0){
@@ -73,8 +73,8 @@ public class ZombieHoard implements Listener {
 
                 if (zombieAmount <= 0){
                     vendrick.stopAttack();
-                    if (plugin.runeHandler != null) {
-                        plugin.runeHandler.setPaused(false);
+                    if (plugin.getFightManager().getRuneHandler() != null) {
+                        plugin.getFightManager().getRuneHandler().setPaused(false);
                     }
                 }
             }
@@ -86,7 +86,7 @@ public class ZombieHoard implements Listener {
         if (e.getDamager() instanceof Projectile){
             return;
         }
-        if (!plugin.fighting.contains(e.getDamager().getUniqueId()) && !e.getDamager().isOp()){
+        if (!plugin.getFightManager().getFighting().contains(e.getDamager().getUniqueId()) && !e.getDamager().isOp()){
             if (e.getEntity().hasMetadata("Growth")){
                 e.setCancelled(true);
                 e.getDamager().sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "The fumes from this growth make a pure soul like yours be completely powerless against it");

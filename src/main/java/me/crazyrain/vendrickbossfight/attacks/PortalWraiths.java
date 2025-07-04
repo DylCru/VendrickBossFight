@@ -2,14 +2,13 @@ package me.crazyrain.vendrickbossfight.attacks;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.mobs.Wraith;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
+import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -43,15 +42,15 @@ public class PortalWraiths implements Listener {
             PortalWraiths.vendrick = vendrick;
             this.players = players;
             if (attack){
-                spawnPortals(PortalWraiths.vendrick.getVendrick().getLocation(), this.players);
+                spawnPortals(PortalWraiths.vendrick.getEntity().getLocation(), this.players);
             }
         }
 
         public void stopAttack(){
             vendrick.setPhase(0);
             vendrick.stopAttack();
-            if (plugin.runeHandler != null) {
-                plugin.runeHandler.setPaused(false);
+            if (plugin.getFightManager().getRuneHandler() != null) {
+                plugin.getFightManager().getRuneHandler().setPaused(false);
             }
         }
 
@@ -162,7 +161,7 @@ public class PortalWraiths implements Listener {
             new BukkitRunnable(){
                 @Override
                 public void run() {
-                    if (!plugin.venSpawned){
+                    if (!plugin.getFightManager().isVenSpawned()){
                         clearAll();
                         cancel();
                     }
@@ -207,7 +206,7 @@ public class PortalWraiths implements Listener {
                 if (e.getEntity().hasMetadata("Portal")){
                     e.setDamage(0);
 
-                    if (!plugin.fighting.contains(e.getDamager().getUniqueId()) && !e.getDamager().isOp()){
+                    if (!plugin.getFightManager().getFighting().contains(e.getDamager().getUniqueId()) && !e.getDamager().isOp()){
                         e.getDamager().sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "The portal reacts violently to your attack");
                         e.getDamager().sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "Your soul is too pure");
                         launchPlayer((Player) e.getDamager(), e.getEntity().getLocation().clone().add(0,-1,0), 100);
@@ -238,7 +237,7 @@ public class PortalWraiths implements Listener {
                             e.getEntity().getWorld().playSound(e.getEntity().getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, 2.0f, 0.9f);
                             launchPlayer((Player) e.getDamager(), e.getEntity().getLocation(), 10 * 10);
 
-                            for (UUID player : plugin.fighting){
+                            for (UUID player : plugin.getFightManager().getFighting()){
                                 Bukkit.getPlayer(player).sendMessage(ChatColor.GREEN + "The portal was destroyed!");
                                 Bukkit.getPlayer(player).playSound(e.getDamager().getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
                             }
@@ -275,7 +274,7 @@ public class PortalWraiths implements Listener {
             stopSpawning();
             stopParticles();
             stopAttack();
-            for (UUID player : plugin.fighting){
+            for (UUID player : plugin.getFightManager().getFighting()){
                 Bukkit.getPlayer(player).sendMessage(ChatColor.GREEN + "The portal was destroyed!");
                 Bukkit.getPlayer(player).playSound(Bukkit.getPlayer(player).getLocation(), Sound.ENTITY_PLAYER_LEVELUP,1,1);
             }

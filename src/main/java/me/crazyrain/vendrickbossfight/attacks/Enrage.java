@@ -2,15 +2,13 @@ package me.crazyrain.vendrickbossfight.attacks;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
+import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import javax.swing.plaf.SpinnerUI;
 import java.util.UUID;
 
 public class Enrage {
@@ -26,7 +24,7 @@ public class Enrage {
 
     public void init(Vendrick vendrick){
         Enrage.vendrick = vendrick;
-        this.eVendrick = vendrick.getVendrick();
+        this.eVendrick = vendrick.getEntity();
         startAttack();
     }
 
@@ -39,24 +37,24 @@ public class Enrage {
             public void run() {
                 switch (line){
                     case 1:
-                        for (UUID id : plugin.fighting){
+                        for (UUID id : plugin.getFightManager().getFighting()){
                             Bukkit.getPlayer(id).sendMessage(Lang.ENRAGE1.toString());
                         }
                         break;
                     case 2:
-                        for (UUID id : plugin.fighting){
+                        for (UUID id : plugin.getFightManager().getFighting()){
                             Bukkit.getPlayer(id).sendMessage(Lang.ENRAGE2.toString());
                         }
                         break;
                     case 3:
-                        for (UUID id : plugin.fighting){
+                        for (UUID id : plugin.getFightManager().getFighting()){
                             Bukkit.getPlayer(id).sendMessage(Lang.ENRAGE3.toString());
                             eVendrick.getWorld().playSound(eVendrick.getLocation(), Sound.ENTITY_WITHER_DEATH, 1.0f, 0.8f);
                         }
                         startParticle(eVendrick.getLocation());
                         break;
                     case 4:
-                        for (UUID id : plugin.fighting){
+                        for (UUID id : plugin.getFightManager().getFighting()){
                             Bukkit.getPlayer(id).sendMessage(Lang.ENRAGE4.toString());
                         }
                         break;
@@ -90,7 +88,7 @@ public class Enrage {
                     startLoc.getWorld().strikeLightning(startLoc);
                     eVendrick.addPotionEffect(PotionEffectType.SPEED.createEffect(10000, 2));
                     eVendrick.addPotionEffect(PotionEffectType.FIRE_RESISTANCE.createEffect(10000, 1));
-                    for (UUID id : plugin.fighting){
+                    for (UUID id : plugin.getFightManager().getFighting()){
                         Bukkit.getPlayer(id).setVelocity(new Vector(0,0.7,0));
                         Bukkit.getPlayer(id).getWorld().playSound(startLoc, Sound.ENTITY_WITHER_SPAWN, 4.0f, 1.0f);
                         Bukkit.getPlayer(id).getWorld().playSound(startLoc, Sound.ENTITY_GENERIC_EXPLODE, 4.0f, 1.3f);

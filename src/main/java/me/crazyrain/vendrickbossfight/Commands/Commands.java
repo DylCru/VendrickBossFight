@@ -1,7 +1,7 @@
 package me.crazyrain.vendrickbossfight.Commands;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.distortions.tidal.BubbleBomb;
+import me.crazyrain.vendrickbossfight.vendrick.DummyVendrick;
 import me.crazyrain.vendrickbossfight.items.ItemID;
 import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
@@ -117,7 +117,7 @@ public class Commands implements CommandExecutor {
                             player.sendMessage(ChatColor.GREEN + "Removed " + removeCount + " merchant!");
                         }
                     } else if (args[0].equalsIgnoreCase("clear")){
-                        if (!plugin.venSpawned){
+                        if (!plugin.getFightManager().isVenSpawned()){
                             int enCount = 0;
                             for (Entity e : player.getNearbyEntities(10,10,10)){
                                 if (e.hasMetadata("PigBomb")
@@ -161,7 +161,7 @@ public class Commands implements CommandExecutor {
                             player.sendMessage(venPrefix + ChatColor.GREEN + " Added new location: " + key + " to the config!");
                         }
                     } else if (args[0].equalsIgnoreCase("summon")) {
-                        if (!plugin.venSpawned) {
+                        if (!plugin.getFightManager().isVenSpawned()) {
                         if (args.length >= 2) {
                             String mob = args[1].toUpperCase();
                             switch (mob) {
@@ -199,11 +199,16 @@ public class Commands implements CommandExecutor {
                                 player.sendMessage(venPrefix + ChatColor.GREEN + " Refreshed your " + item[0].getItemMeta().getDisplayName());
                             }
                         }
-                    } else if (args[0].equalsIgnoreCase("test")) {
+                    } else if (args[0].equalsIgnoreCase("dummy")) {
                         ArrayList<UUID> players = new ArrayList<>();
                         players.add(player.getUniqueId());
-                        BubbleBomb bubbleBomb = new BubbleBomb(player.getLocation(), plugin, players);
-                        bubbleBomb.startAttack();
+                        DummyVendrick vendrick = new DummyVendrick(players, player.getLocation(), plugin);
+                        ArmorStand vendrickSeat = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+                        vendrickSeat.setSmall(true);
+                        vendrickSeat.setVisible(false);
+                        vendrickSeat.setMarker(true);
+                        vendrickSeat.addPassenger(vendrick.getEntity());
+                        plugin.getFightManager().setVendrick(vendrick);
                     } else {
                         player.sendMessage(venPrefix + ChatColor.RED + " /ven [help] [items] [reload] [merchant] [mremove] [refresh]");
                     }

@@ -1,8 +1,6 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
-import com.google.common.base.Ascii;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
 import org.bukkit.*;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -10,15 +8,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.EulerAngle;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
 public class FloatingCollectable {
 
@@ -128,7 +119,7 @@ public class FloatingCollectable {
                     if (e instanceof Player){
                         Player player = (Player) e;
                         if (fightOnly){
-                            if (!plugin.fighting.contains(player.getUniqueId())){
+                            if (!plugin.getFightManager().getFighting().contains(player.getUniqueId())){
                                 continue;
                             }
                         }

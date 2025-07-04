@@ -2,7 +2,7 @@ package me.crazyrain.vendrickbossfight.attacks;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.mobs.PigBomb;
-import me.crazyrain.vendrickbossfight.npcs.Vendrick;
+import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -34,7 +34,7 @@ public class PigBombs implements Listener {
         this.players = players;
         pigAmount = 4;
         pigsDead = false;
-        spawnPigs(plugin.vendrick.getVendrick().getLocation().add(0,4,0));
+        spawnPigs(plugin.getFightManager().getVendrick().getEntity().getLocation().add(0,4,0));
     }
 
     public void spawnPigs(Location loc){
@@ -59,9 +59,9 @@ public class PigBombs implements Listener {
                     }
                 }
                 countDown();
-                plugin.vendrick.setSkipable(true);
+                plugin.getFightManager().getVendrick().setSkipable(true);
 
-                for (UUID p : plugin.fighting){
+                for (UUID p : plugin.getFightManager().getFighting()){
                     Bukkit.getPlayer(p).sendMessage(ChatColor.RED + "Vendrick threw " + ChatColor.GOLD + ChatColor.BOLD + "PIG BOMBS! " + ChatColor.RED + "Diffuse them quickly!");
                 }
 
@@ -75,9 +75,9 @@ public class PigBombs implements Listener {
             @Override
             public void run() {
                 if (!pigsDead) {
-                    plugin.vendrick.stopAttack();
-                    if (plugin.runeHandler != null) {
-                        plugin.runeHandler.setPaused(false);
+                    plugin.getFightManager().getVendrick().stopAttack();
+                    if (plugin.getFightManager().getRuneHandler() != null) {
+                        plugin.getFightManager().getRuneHandler().setPaused(false);
                     }
                 }
             }
@@ -94,11 +94,11 @@ public class PigBombs implements Listener {
                 pigAmount -= 1;
 
                 if (pigAmount <= 0){
-                    plugin.vendrick.stopAttack();
-                    if (plugin.runeHandler != null) {
-                        plugin.runeHandler.setPaused(false);
+                    plugin.getFightManager().getVendrick().stopAttack();
+                    if (plugin.getFightManager().getRuneHandler() != null) {
+                        plugin.getFightManager().getRuneHandler().setPaused(false);
                     }
-                    for (UUID p : plugin.fighting){
+                    for (UUID p : plugin.getFightManager().getFighting()){
                         Bukkit.getPlayer(p).sendMessage(ChatColor.GREEN + "All the pig bombs were diffused!");
                         Bukkit.getPlayer(p).playSound(Bukkit.getPlayer(p).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10 , 1f);
                     }
@@ -122,7 +122,7 @@ public class PigBombs implements Listener {
 
     @EventHandler
     public void stopPigAttack(EntityDamageByEntityEvent e){
-        if (!plugin.fighting.contains(e.getDamager().getUniqueId()) && !e.getDamager().isOp()){
+        if (!plugin.getFightManager().getFighting().contains(e.getDamager().getUniqueId()) && !e.getDamager().isOp()){
             if (e.getEntity().hasMetadata("PigBomb")){
                 e.setCancelled(true);
                 e.getDamager().sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "The defusal process is too confusing for a soul as pure as yours");
@@ -151,18 +151,18 @@ public class PigBombs implements Listener {
     }
 
     public void skipAttack(){
-        for (Entity e : plugin.vendrick.getVendrick().getNearbyEntities(30,30,30)){
+        for (Entity e : plugin.getFightManager().getVendrick().getEntity().getNearbyEntities(30,30,30)){
             if (e.hasMetadata("PigBomb")){
                 e.getWorld().spawnParticle(Particle.SPELL_WITCH, e.getLocation().clone().add(0,0.5,0), 10);
                 e.remove();
             }
         }
         pigsDead = true;
-        plugin.vendrick.stopAttack();
-        if (plugin.runeHandler != null) {
-            plugin.runeHandler.setPaused(false);
+        plugin.getFightManager().getVendrick().stopAttack();
+        if (plugin.getFightManager().getRuneHandler() != null) {
+            plugin.getFightManager().getRuneHandler().setPaused(false);
         }
-        for (UUID p : plugin.fighting){
+        for (UUID p : plugin.getFightManager().getFighting()){
             Bukkit.getPlayer(p).sendMessage(ChatColor.GREEN + "All the pig bombs were diffused!");
             Bukkit.getPlayer(p).playSound(Bukkit.getPlayer(p).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 10 , 1f);
         }
