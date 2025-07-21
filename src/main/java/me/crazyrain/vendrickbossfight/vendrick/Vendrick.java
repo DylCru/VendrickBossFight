@@ -1,7 +1,10 @@
 package me.crazyrain.vendrickbossfight.vendrick;
 
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickDeathEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import me.crazyrain.vendrickbossfight.items.ItemManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -77,7 +80,7 @@ public class Vendrick {
     }
 
     public double getHealth(){
-        return vendrick.getHealth();
+        return health;
     }
 
     public LivingEntity getEntity(){
@@ -113,6 +116,8 @@ public class Vendrick {
         health -= damage;
         if (health <= 0) {
             Bukkit.broadcastMessage("Vendrick has been killed");
+            getEntity().setHealth(0);
+            plugin.getServer().getPluginManager().callEvent(new VendrickDeathEvent(this, null));
         }
         Bukkit.broadcastMessage("Health Remaining: " + health);
     }
@@ -129,6 +134,6 @@ public class Vendrick {
     }
     public int getDifficulty() {return 1;}
 
-    public String getDistortion(){ return "Normal";}
+    public Distortion getDistortion(){ return Distortion.NORMAL; }
 
 }

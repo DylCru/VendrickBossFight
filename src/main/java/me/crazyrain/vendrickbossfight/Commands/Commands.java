@@ -1,6 +1,7 @@
 package me.crazyrain.vendrickbossfight.Commands;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.FightManager;
 import me.crazyrain.vendrickbossfight.vendrick.DummyVendrick;
 import me.crazyrain.vendrickbossfight.items.ItemID;
 import me.crazyrain.vendrickbossfight.items.ItemManager;
@@ -200,9 +201,11 @@ public class Commands implements CommandExecutor {
                             }
                         }
                     } else if (args[0].equalsIgnoreCase("dummy")) {
-                        ArrayList<UUID> players = new ArrayList<>();
-                        players.add(player.getUniqueId());
-                        DummyVendrick vendrick = new DummyVendrick(players, player.getLocation(), plugin);
+                        plugin.setFightManager(null);
+                        FightManager manager = new FightManager();
+                        manager.getFighting().add(player.getUniqueId());
+                        plugin.setFightManager(manager);
+                        DummyVendrick vendrick = new DummyVendrick(manager.getFighting(), player.getLocation(), plugin);
                         ArmorStand vendrickSeat = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
                         vendrickSeat.setSmall(true);
                         vendrickSeat.setVisible(false);

@@ -5,6 +5,7 @@ import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSkipSpiritEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
 import me.crazyrain.vendrickbossfight.attacks.PigBombs;
 import me.crazyrain.vendrickbossfight.attacks.PortalWraiths;
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import me.crazyrain.vendrickbossfight.vendrick.dark.DarkVendrick;
 import me.crazyrain.vendrickbossfight.vendrick.flaming.FlamingVendrick;
 import me.crazyrain.vendrickbossfight.vendrick.stormy.Hurricane;
@@ -136,7 +137,7 @@ public class FightCommands implements CommandExecutor {
                 }
                 else if (args[0].equalsIgnoreCase("stop") || args[0].equalsIgnoreCase("st")){
                     if (plugin.getFightManager().isVenSpawned()){
-                        if (plugin.getFightManager().getVendrick().getDistortion().equalsIgnoreCase("dark")) {
+                        if (plugin.getFightManager().getVendrick().getDistortion().equals(Distortion.DARK)) {
                             if (((DarkVendrick) plugin.getFightManager().getVendrick()).isDead()) {
                                 player.sendMessage(venPrefix + ChatColor.RED + " You cannot end the fight now, wait for the cutscene to end.");
                                 return true;

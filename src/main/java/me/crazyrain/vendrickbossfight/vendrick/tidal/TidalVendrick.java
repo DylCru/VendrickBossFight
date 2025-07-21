@@ -2,6 +2,7 @@ package me.crazyrain.vendrickbossfight.vendrick.tidal;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
 import org.bukkit.Bukkit;
@@ -21,6 +22,8 @@ import java.util.UUID;
 
 public class TidalVendrick extends Vendrick {
 
+    final int DEFAULT_HEALTH = 500;
+    int health;
     List<UUID> players = new ArrayList<>();
     Vindicator vendrick;
     VendrickBossFight plugin;
@@ -50,25 +53,18 @@ public class TidalVendrick extends Vendrick {
         vendrick.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100000, 1));
         vendrick.addPotionEffect(PotionEffectType.SPEED.createEffect(100000, 2));
 
-        if (plugin.getConfig().getInt("vendrick-health") > 2048){
-            plugin.getConfig().set("vendrick-health", 2048);
-            AttributeModifier modifier = new AttributeModifier(Objects.requireNonNull(vendrick.getCustomName()), 2048, AttributeModifier.Operation.ADD_NUMBER);
-            vendrick.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(modifier);
-            vendrick.setHealth(2048);
-
-        } else if (plugin.getConfig().getInt("vendrick-health") < 500){
-            AttributeModifier modifier = new AttributeModifier(Objects.requireNonNull(vendrick.getCustomName()), 500, AttributeModifier.Operation.ADD_NUMBER);
-            plugin.getConfig().set("vendrick-health", 500);
-            vendrick.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(modifier);
-            vendrick.setHealth(500);
-
+        int configHealth = plugin.getConfig().getInt("vendrick-health");
+        if (configHealth == 0) {
+            health = DEFAULT_HEALTH;
         } else {
-            AttributeModifier modifier = new AttributeModifier(Objects.requireNonNull(vendrick.getCustomName()), plugin.getConfig().getInt("vendrick-health"), AttributeModifier.Operation.ADD_NUMBER);
-            vendrick.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(modifier);
-            vendrick.setHealth(plugin.getConfig().getInt("vendrick-health"));
+            health = configHealth;
         }
-        vendrick.setHealth(plugin.getConfig().getInt("vendrick-health"));
+
         Bukkit.getServer().getPluginManager().callEvent(new VendrickFightStartEvent(players, getDistortion(), getDifficulty()));
+    }
+
+    public double getHealth(){
+        return health;
     }
 
     @Override
@@ -123,7 +119,7 @@ public class TidalVendrick extends Vendrick {
     public int getDifficulty() {return 3;}
 
     @Override
-    public String getDistortion(){ return "Tidal";}
+    public Distortion getDistortion(){ return Distortion.WATER;}
 
     public ArrayList<Entity> getSheilds() {
         return sheilds;

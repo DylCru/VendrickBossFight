@@ -1,6 +1,7 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
 import io.github.bananapuncher714.nbteditor.NBTEditor;
+import me.crazyrain.vendrickbossfight.CustomEvents.VendrickDeathEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
@@ -397,7 +398,7 @@ public class Events implements Listener {
                                     plugin.getFightManager().getVendrick().startAttack(1);
                                     attacking = true;
                                     for (UUID id : plugin.getFightManager().getFighting()) {
-                                        AttackCharge charge = new AttackCharge(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Eternal Wraiths", Bukkit.getPlayer(id));
+                                        new AttackCharge(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Eternal Wraiths", Bukkit.getPlayer(id));
                                         Bukkit.getPlayer(id).sendMessage(Lang.PORTAL.toString());
                                     }
                                     try{
@@ -412,7 +413,7 @@ public class Events implements Listener {
                                         BubbleBomb bomb = new BubbleBomb(e.getEntity().getLocation(), plugin, plugin.getFightManager().getFighting());
                                         bomb.startAttack();
                                         for (UUID id : plugin.getFightManager().getFighting()){
-                                            AttackCharge charge = new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));
+                                            new AttackCharge(ChatColor.BLUE + "" + ChatColor.BOLD + "Bubble Bomb", Bukkit.getPlayer(id));
                                             Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
                                         }
                                     } else {
@@ -420,7 +421,7 @@ public class Events implements Listener {
                                         pigBombs.init(plugin.getFightManager().getVendrick(), plugin.getFightManager().getFighting());
                                         plugin.getFightManager().getVendrick().startAttack(2);
                                         for (UUID id : plugin.getFightManager().getFighting()){
-                                            AttackCharge charge = new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
+                                            new AttackCharge(ChatColor.GOLD + "" + ChatColor.BOLD + "Pig Bombs", Bukkit.getPlayer(id));
                                             Bukkit.getPlayer(id).sendMessage(Lang.BOMBS.toString());
                                         }
                                     }
@@ -453,92 +454,94 @@ public class Events implements Listener {
 
     public boolean eventCalled;
     @EventHandler
-    public void onBossDeath (EntityDeathEvent e){
-        if (e.getEntity().getScoreboardTags().contains("venDark")) {return;}
+    public void onBossDeath (VendrickDeathEvent e){ //TODO refactor the dark vendrick death event
+        Bukkit.broadcastMessage("Vendrick death event called");
+//        if (e.getEntity().getScoreboardTags().contains("venDark")) {return;}
+        if (plugin.getFightManager().getVendrick().getDistortion().equals(Distortion.DARK)) {return;}
 
-            if (e.getEntity() instanceof Vindicator){
-                if (e.getEntity().hasMetadata("Vendrick")){
-                    if (e.getEntity().getKiller() != null){
+//            if (e.getEntity() instanceof Vindicator) {}
+//                if (e.getEntity().hasMetadata("Vendrick")){}
+//                    if (e.getEntity().getKiller() != null){}
 
-                        for (Entity en : e.getEntity().getNearbyEntities(50,50,50)){
-                            if (en.hasMetadata("Wraith") || en.hasMetadata("PigBomb") || en.hasMetadata("SquidShield") || en.hasMetadata("Growth")){
-                                en.remove();
-                            }
-                        }
+        //TODO create a MobHandler class to handle this (removing shit) instead of nearby entites
+        for (Entity en : e.getVendrick().getEntity().getNearbyEntities(50,50,50)){
+            if (en.hasMetadata("Wraith") || en.hasMetadata("PigBomb") || en.hasMetadata("SquidShield") || en.hasMetadata("Growth")) {
+                en.remove();
+            }
+        }
 
-                        plugin.bars.forEach(bar -> {
-                            bar.fill(0.0);
-                        });
+        plugin.bars.forEach(bar -> {
+            bar.fill(0.0);
+        });
 
-                        e.getDrops().clear();
+//      e.getDrops().clear();
+        eventCalled = false;
+        plugin.getFightManager().setVenSpawned(false);
 
-                        eventCalled = false;
-                        plugin.getFightManager().setVenSpawned(false);
-
-                        if (plugin.getConfig().getBoolean("skip-cutscene")){
-                            new BukkitRunnable(){
-                                @Override
-                                public void run() {
-                                    bossDead = true;
-                                    for (UUID id : plugin.getFightManager().getFighting()){
-                                        victory(Bukkit.getPlayer(id));
-                                    }
-                                    plugin.getServer().getPluginManager().callEvent(new VendrickFightStopEvent(plugin.getFightManager().getFighting(), plugin.getFightManager().getFighting(), plugin.getFightManager().getLosers()
-                                            ,plugin.getFightManager().getVendrick().getDistortion(), plugin.getFightManager().getVendrick().getDifficulty()));
-                                    lost = false;
-                                    plugin.getFightManager().getFighting().clear();
-                                }
-                            }.runTaskLater(plugin, 40);
-                            return;
-                        }
-
-                        for (UUID id : plugin.getFightManager().getFighting()){
-                            if (!plugin.getConfig().getBoolean("disable-effects")){
-                                Bukkit.getPlayer(id).addPotionEffect(PotionEffectType.BLINDNESS.createEffect(10000, 2));
-                                Bukkit.getPlayer(id).addPotionEffect(PotionEffectType.SLOW.createEffect(10000, 5));
-                            }
-                            bossDead = true;
-
-                            Bukkit.getPlayer(id).sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "A loud, echoing voice fills the land");
-
-                            new BukkitRunnable(){
-                                int text = 0;
-
-                                @Override
-                                public void run() {
-                                    text += 1;
-                                    switch (text){
-                                        case 2:
-                                            Bukkit.getPlayer(id).sendMessage(Lang.END1.toString());
-                                            Bukkit.getPlayer(id).playSound(Bukkit.getPlayer(id).getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 20f, 0.6f);
-                                            break;
-                                        case 3:
-                                            Bukkit.getPlayer(id).sendMessage(Lang.END2.toString());
-                                            Bukkit.getPlayer(id).playSound(Bukkit.getPlayer(id).getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 20f, 0.6f);
-                                            break;
-                                        case 4:
-                                            Bukkit.getPlayer(id).sendMessage(Lang.END3.toString());
-                                            Bukkit.getPlayer(id).playSound(Bukkit.getPlayer(id).getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 20f, 0.6f);
-                                            break;
-                                        case 5:
-                                            Bukkit.getPlayer(id).sendMessage(Lang.END4.toString());
-                                        case 6:
-                                            if (!eventCalled){
-                                                plugin.getServer().getPluginManager().callEvent(new VendrickFightStopEvent(plugin.getFightManager().getFighting(), plugin.getFightManager().getFighting(), plugin.getFightManager().getLosers()
-                                                        ,plugin.getFightManager().getVendrick().getDistortion(), plugin.getFightManager().getVendrick().getDifficulty()));
-                                                eventCalled = true;
-                                            }
-                                            victory(Bukkit.getPlayer(id));
-                                            lost = false;
-                                            plugin.getFightManager().getFighting().clear();
-                                            cancel();
-                                    }
-                                }
-                            }.runTaskTimer(plugin, 0, 20 * 4);
-                        }
+        if (plugin.getConfig().getBoolean("skip-cutscene")){
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    bossDead = true;
+                    for (UUID id : plugin.getFightManager().getFighting()){
+                        victory(Bukkit.getPlayer(id));
                     }
+                    plugin.getServer().getPluginManager().callEvent(new VendrickFightStopEvent(plugin.getFightManager().getFighting(), plugin.getFightManager().getFighting(), plugin.getFightManager().getLosers()
+                            ,plugin.getFightManager().getVendrick().getDistortion(), plugin.getFightManager().getVendrick().getDifficulty()));
+                    lost = false;
+                    plugin.getFightManager().getFighting().clear();
+                }
+            }.runTaskLater(plugin, 40);
+            return;
+        }
+        for (UUID id : plugin.getFightManager().getFighting()) {
+            endCutscene(Bukkit.getPlayer(id));
+        }
+    }
+
+    public void endCutscene(Player player) {
+        if (!plugin.getConfig().getBoolean("disable-effects")){
+            player.addPotionEffect(PotionEffectType.BLINDNESS.createEffect(10000, 2));
+            player.addPotionEffect(PotionEffectType.SLOW.createEffect(10000, 5));
+        }
+        bossDead = true;
+
+        player.sendMessage(ChatColor.DARK_GRAY + "" + ChatColor.ITALIC + "A loud, echoing voice fills the land");
+
+        new BukkitRunnable(){
+            int text = 0;
+
+            @Override
+            public void run() {
+                text += 1;
+                switch (text){
+                    case 2:
+                        player.sendMessage(Lang.END1.toString());
+                        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 20f, 0.6f);
+                        break;
+                    case 3:
+                        player.sendMessage(Lang.END2.toString());
+                        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 20f, 0.6f);
+                        break;
+                    case 4:
+                        player.sendMessage(Lang.END3.toString());
+                        player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_AMBIENT, 20f, 0.6f);
+                        break;
+                    case 5:
+                        player.sendMessage(Lang.END4.toString());
+                    case 6:
+                        if (!eventCalled){
+                            plugin.getServer().getPluginManager().callEvent(new VendrickFightStopEvent(plugin.getFightManager().getFighting(), plugin.getFightManager().getFighting(), plugin.getFightManager().getLosers()
+                                    ,plugin.getFightManager().getVendrick().getDistortion(), plugin.getFightManager().getVendrick().getDifficulty()));
+                            eventCalled = true;
+                        }
+                        victory(player);
+                        lost = false;
+                        plugin.getFightManager().getFighting().clear();
+                        cancel();
                 }
             }
+        }.runTaskTimer(plugin, 0, 20 * 4);
     }
 
     public void victory(Player player) {
@@ -562,16 +565,16 @@ public class Events implements Listener {
         if (plugin.getConfig().get("WinMessage") == null || Objects.requireNonNull(plugin.getConfig().getString("WinMessage")).equalsIgnoreCase("")) {
             if (plugin.getConfig().getBoolean("BroadcastMessage") || plugin.getConfig().get("BroadcastMessage") == null) {
                 for (Player p : Bukkit.getOnlinePlayers()) {
-                    if (!plugin.getFightManager().getVendrick().getDistortion().equalsIgnoreCase("normal")){
-                        p.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + ChatColor.ITALIC + player.getDisplayName() + ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + " has defeated " + plugin.getFightManager().getVendrick().getDistortion() + " Vendrick!");
+                    if (!plugin.getFightManager().getVendrick().getDistortion().equals(Distortion.NORMAL)){
+                        p.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + ChatColor.ITALIC + player.getDisplayName() + ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + " has defeated " + plugin.getFightManager().getVendrick().getDistortion().toString() + " Vendrick!");
                     } else {
                         p.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + ChatColor.ITALIC + player.getDisplayName() + ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + " has defeated Vendrick!");
                     }
 
                 }
             } else {
-                if (!plugin.getFightManager().getVendrick().getDistortion().equalsIgnoreCase("normal")){
-                    player.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + ChatColor.ITALIC + player.getDisplayName() + ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + " has defeated " + plugin.getFightManager().getVendrick().getDistortion() + " Vendrick!");
+                if (!plugin.getFightManager().getVendrick().getDistortion().equals(Distortion.NORMAL)){
+                    player.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + ChatColor.ITALIC + player.getDisplayName() + ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + " has defeated " + plugin.getFightManager().getVendrick().getDistortion().toString() + " Vendrick!");
                 } else {
                     player.sendMessage(ChatColor.WHITE + "" + ChatColor.BOLD + ChatColor.ITALIC + player.getDisplayName() + ChatColor.DARK_AQUA + "" + ChatColor.ITALIC + " has defeated Vendrick!");
                 }
@@ -597,7 +600,6 @@ public class Events implements Listener {
             }
         }.runTaskLater(plugin, 20);
     }
-
 
     public void lose(){
         bossDead = true;
@@ -628,7 +630,7 @@ public class Events implements Listener {
             }
         }.runTaskLater(plugin, 20 * 5);
 
-        if (plugin.getFightManager().getVendrick().getDistortion().equalsIgnoreCase("dark")) {
+        if (plugin.getFightManager().getVendrick().getDistortion().equals(Distortion.DARK)) {
             plugin.getFightManager().getRuneHandler().clearStand();
             plugin.getFightManager().getRuneHandler().setActive(false);
         }

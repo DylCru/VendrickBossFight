@@ -1,6 +1,7 @@
 package me.crazyrain.vendrickbossfight.functionality;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import org.bukkit.Bukkit;
 import org.bukkit.Particle;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -23,7 +24,7 @@ public class BossHealthEvents implements Listener {
         if (!(e.getDamager() instanceof Player) && !(e.getDamager() instanceof Arrow)){
             return;
         }
-        if (!e.getEntity().getScoreboardTags().contains("DummyVendrick")) {
+        if (!e.getEntity().hasMetadata("Vendrick")) {
             return;
         }
 
@@ -46,6 +47,13 @@ public class BossHealthEvents implements Listener {
         player.sendMessage("Damage Dealt: " + damage);
 
         plugin.getFightManager().damageBoss(damage);
+
+        double rawPercent = plugin.getFightManager().getVendrick().getHealth() / plugin.getConfig().getInt("vendrick-health");
+        double percent = Math.round(rawPercent * 100.0) / 100.0;
+
+        for (Bar bar : plugin.bars){
+            bar.fill(percent);
+        }
 
         e.setDamage(0);
 

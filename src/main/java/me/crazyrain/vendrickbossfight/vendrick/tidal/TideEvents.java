@@ -2,6 +2,7 @@ package me.crazyrain.vendrickbossfight.vendrick.tidal;
 
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStopEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import me.crazyrain.vendrickbossfight.functionality.Lang;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -92,7 +93,7 @@ public class TideEvents implements Listener {
 
     @EventHandler
     public void onVendrickDeath(EntityDeathEvent e){
-        if (e.getEntity().hasMetadata("Vendrick") && plugin.getFightManager().getVendrick().getDistortion().equalsIgnoreCase("tidal")){
+        if (e.getEntity().hasMetadata("Vendrick") && plugin.getFightManager().getVendrick().getDistortion().equals(Distortion.WATER)){
             resetVariables();
         }
     }
@@ -120,7 +121,7 @@ public class TideEvents implements Listener {
 
     @EventHandler
     public void clearSquidsOnFightStop(VendrickFightStopEvent e) {
-        if (e.getDistortion().equalsIgnoreCase("tidal")) {
+        if (e.getDistortion().equals(Distortion.WATER)) {
             resetVariables();
         }
     }

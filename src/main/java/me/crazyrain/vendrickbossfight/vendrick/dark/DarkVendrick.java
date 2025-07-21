@@ -1,6 +1,7 @@
 package me.crazyrain.vendrickbossfight.vendrick.dark;
 
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.DistSpirit;
 import me.crazyrain.vendrickbossfight.items.ItemManager;
 import me.crazyrain.vendrickbossfight.vendrick.Vendrick;
@@ -22,6 +23,8 @@ import java.util.UUID;
 
 public class DarkVendrick extends Vendrick {
 
+    final int DEFAULT_HEALTH = 500;
+    int health;
     List<UUID> players = new ArrayList<>();
     Vindicator vendrick;
     VendrickBossFight plugin;
@@ -51,24 +54,17 @@ public class DarkVendrick extends Vendrick {
         vendrick.addPotionEffect(PotionEffectType.DAMAGE_RESISTANCE.createEffect(100000, 1));
         vendrick.addPotionEffect(PotionEffectType.FIRE_RESISTANCE.createEffect(100000, 1));
 
-        if (plugin.getConfig().getInt("vendrick-health") > 2048){
-            plugin.getConfig().set("vendrick-health", 2048);
-            AttributeModifier modifier = new AttributeModifier(Objects.requireNonNull(vendrick.getCustomName()), 2048, AttributeModifier.Operation.ADD_NUMBER);
-            vendrick.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(modifier);
-            vendrick.setHealth(2048);
-
-        } else if (plugin.getConfig().getInt("vendrick-health") < 500){
-            AttributeModifier modifier = new AttributeModifier(Objects.requireNonNull(vendrick.getCustomName()), 500, AttributeModifier.Operation.ADD_NUMBER);
-            plugin.getConfig().set("vendrick-health", 500);
-            vendrick.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(modifier);
-            vendrick.setHealth(500);
-
+        int configHealth = plugin.getConfig().getInt("vendrick-health");
+        if (configHealth == 0) {
+            health = DEFAULT_HEALTH;
         } else {
-            AttributeModifier modifier = new AttributeModifier(Objects.requireNonNull(vendrick.getCustomName()), plugin.getConfig().getInt("vendrick-health"), AttributeModifier.Operation.ADD_NUMBER);
-            vendrick.getAttribute(Attribute.GENERIC_MAX_HEALTH).addModifier(modifier);
-            vendrick.setHealth(plugin.getConfig().getInt("vendrick-health"));
+            health = configHealth;
         }
         vendrick.setHealth(plugin.getConfig().getInt("vendrick-health"));
+    }
+
+    public double getHealth(){
+        return health;
     }
 
     @Override
@@ -129,7 +125,7 @@ public class DarkVendrick extends Vendrick {
     public int getDifficulty() {return 5;}
 
     @Override
-    public String getDistortion(){ return "Dark";}
+    public Distortion getDistortion(){ return Distortion.DARK;}
 
     public boolean isDead() {
         return isDead;

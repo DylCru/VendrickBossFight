@@ -3,6 +3,7 @@ package me.crazyrain.vendrickbossfight.vendrick.dark;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickFightStartEvent;
 import me.crazyrain.vendrickbossfight.CustomEvents.VendrickSpiritSpawnEvent;
 import me.crazyrain.vendrickbossfight.VendrickBossFight;
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.DistSpirit;
 import me.crazyrain.vendrickbossfight.vendrick.dark.spirits.SpiritSpawnAnim;
 import me.crazyrain.vendrickbossfight.functionality.Bar;
@@ -42,7 +43,7 @@ public class DarkEvents implements Listener {
 
     @EventHandler
     public void onDarkVendrickSpawn(VendrickFightStartEvent e){
-        if (e.getDistortion().equalsIgnoreCase("dark")){
+        if (e.getDistortion().equals(Distortion.DARK)){
             VendrickBossFight.plugin.getFightManager().setRuneHandler(new DarkRuneHandler(VendrickBossFight.plugin.getFightManager().getVendrick().getEntity(), VendrickBossFight.plugin));
             endExplodeActive = true;
             spawned.clear();

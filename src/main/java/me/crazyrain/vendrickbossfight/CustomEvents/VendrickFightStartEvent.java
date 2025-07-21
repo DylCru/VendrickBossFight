@@ -1,5 +1,6 @@
 package me.crazyrain.vendrickbossfight.CustomEvents;
 
+import me.crazyrain.vendrickbossfight.functionality.Distortion;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -10,10 +11,10 @@ public class VendrickFightStartEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private List<UUID> players;
-    private String distortion;
+    private Distortion distortion;
     private int difficulty;
 
-    public VendrickFightStartEvent(List<UUID> players, String distortion, int difficulty){
+    public VendrickFightStartEvent(List<UUID> players, Distortion distortion, int difficulty){
         this.players = players;
         this.distortion = distortion;
         this.difficulty = difficulty;
@@ -23,7 +24,7 @@ public class VendrickFightStartEvent extends Event {
         return players;
     }
 
-    public String getDistortion() {
+    public Distortion getDistortion() {
         return distortion;
     }
 

@@ -13,4 +13,9 @@ public class DummyVendrick extends Vendrick{
         spawnBoss();
         vendrick.addScoreboardTag("DummyVendrick");
     }
+
+    @Override
+    public int getDifficulty() {
+        return 5;
+    }
 }
